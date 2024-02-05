@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>/classic/</title>
+		<style>
+			body {
+				font-family: arial;
+				background-color: #05050a;
+				padding-top: 20px; /* Add top padding here */
+				margin: 0;
+				padding: none;
+			}
+			.emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
+			div.emscripten { text-align: center; }
+			canvas.emscripten { border: 0px none; background-color: black; }
+			
+			canvas.emscripten {
+			  outline: none;
+			  -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1></h1>
+		</header>
+	
+		<div class="emscripten">
+			<progress value="0" max="100" id="progress" hidden=1></progress>
+		</div>
+		<div class="emscripten_border">
+			<canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+		</div>
+		<script type='text/javascript'>
+		  var Module = {
+			canvas: (() => {
+			  var canvas = document.getElementById('canvas');
+			  canvas.addEventListener("webglcontextlost", (e) => { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+
+			  return canvas;
+			})(),
+		  };
+		</script>
+		<script async type="text/javascript" src="index.js"></script>
+	</body>
+</html>
