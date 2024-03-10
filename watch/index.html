@@ -1,0 +1,1010 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+    
+	body { 
+		background-color: #101D21;
+		margin: 0px;
+		overflow: hidden;
+	}
+	
+	/* width */
+	::-webkit-scrollbar {
+	  height: 7px;            
+	  width: 7px;              
+	}
+	
+	::-webkit-scrollbar-corner {
+	  background: rgba(0,0,0,0);
+	}
+
+	/* Track */
+	::-webkit-scrollbar-track {
+	  background: #03070755;
+	  border-radius: 7px;
+	}
+
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+	  background: #1F3A3Fee;
+	  border-radius: 7px;
+	}
+
+	/* Handle on hover */
+	::-webkit-scrollbar-thumb:hover {
+	  background: #555;
+	}
+	
+	#media-queue-container {
+		position: fixed;
+		top: 0;
+		right: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end; 
+		z-index: 999;
+	}
+
+	#media-table-container {
+		max-height: 200px;
+		overflow-y: auto;
+		background-color: #00000077;
+		border-radius: 0 0 0 15px;
+		padding: 5px 5px 5px 15px;
+		position: relative;
+		text-align: right;
+	}
+
+	tr {
+		vertical-align: bottom;
+	}
+
+	#hide-media-button {
+		font-family: Roboto;
+		font-weight: 400;
+		border: none;
+		font-size: 0.9rem;
+		padding: 3px 7px 3px 13px;
+		background-color: #00000077;
+		color: #c3c3c3;
+		display: block; 
+		border-radius: 0px 0px 0px 15px;
+		cursor: pointer;
+	}
+
+	#media-table {
+		width: 100%;
+		text-align: right;
+		white-space: pre;
+	}
+
+	#media-queue-row-state, #media-queue-row-time, #media-queue-row {
+		color: #c3c3c3;
+		white-space: pre;
+	}
+
+
+    td {
+        font-family: Roboto;
+		font-weight: 400;
+		font-size: 1rem;
+        display: inline-block;
+		color: #a0a1ae;
+		line-height: 1;
+		text-align: right;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+    }
+
+    label {
+        font-family: Roboto;
+		font-weight: 400;
+        width: 100px; 
+		font-size: 1.3rem;
+        display: inline-block;
+		color: #d0d3df;
+		padding-right: 10px;
+    }
+	
+	input {
+	    font-family: Roboto;
+		font-weight: 400;
+		border: none;
+		font-size: 1.2rem;
+		padding: 0px 2px 0px 2px;
+		margin-top: 5px;
+		background-color: #0B1416;
+		color: #d0d3df;
+		outline: none;
+	}
+	
+	#login {
+	    font-family: Roboto;
+		font-weight: 400;
+		border: none;
+		font-size: 1.2rem;
+		padding: 2px 6px 2px 6px;
+		margin-top: 5px;
+		background-color: #d0d3df;
+		color: #0B1416;
+		outline: none;
+	}
+	
+	
+	#serverInfoHeader {
+	    font-family: Roboto;
+		font-weight: 300;
+		font-size: 5rem;
+		text-align: center;
+		color: #d0d3df;
+		margin: 0;
+	}
+	
+	video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+	
+	#serverInfoSubheader {
+	    font-family: Roboto;
+		font-weight: 300;
+		font-size: 1.2rem;
+		text-align: center;
+		color: #d0d3df;
+		margin: 0;
+		padding-bottom: 5rem;
+	}
+	
+    #form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; 
+        height: calc(100vh - 35%);
+    }
+	
+    #player-container, #media-queue-request-container {
+        display: none
+    }
+
+	#player-container {
+        z-index: -999;
+    }
+	
+	#head, #foot {
+		height: 8%;
+		min-height: 25px;
+		width: 100%;
+		background-color: #0B1416;
+		overflow: hidden;
+	}
+	
+	#head {
+		position: fixed; 
+		top: 0;
+    }
+	
+	#foot {
+		position: fixed; 
+		bottom: 0;
+    }
+	
+
+	#chat-box-container {
+		position: fixed;
+		top: 0;
+		left: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end; 
+		z-index: 999;
+	}
+
+	#chat-box-table-container {
+		overflow-y: auto;
+		background-color: #00000055;
+		padding: 5px 5px 5px 5px;
+		position: relative;
+		min-width: 64vh;
+		max-width: 64vh;
+		min-height: 16vh;
+		max-height: 16vh;
+		overflow-x: hidden;
+	}
+	
+    #msg, #msgTime, #msgSender {
+        font-family: Roboto;
+		font-weight: 400;
+		font-size: 1rem;
+        display: inline-block;
+		color: #f3f3f3;
+		max-width: 63vh;
+		white-space: pre-wrap;
+		word-wrap: break-word; 
+		text-align :left;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		
+    }
+
+    textarea::-webkit-scrollbar {
+        display: none;
+    }
+	
+	textarea {
+	    font-family: Roboto;
+		font-weight: 400;
+		border: none;
+		min-width: calc(64vh + 10px);
+		padding-left: 0.25rem;
+		font-size: 1.1rem;
+		background-color: #00000077;
+        resize: none;
+		color: #f3f3f3;
+        overflow: hidden;
+		outline: none;
+		padding-left: 5px;
+		padding-right: 5px;
+    }
+	
+	#chat-box-table tr {
+		word-wrap: break-word;
+	}
+
+</style>
+
+
+<html>
+	<body>
+		
+		<div id="head"></div>
+		
+		<div id="form-container">
+			<p id="serverInfoHeader"> </p>
+			<p id="serverInfoSubheader"> </p>
+			<form>
+				<label for="serverURL">Server</label>
+				<input type="text" id="serverURL" name="serverURL"><br/>
+				<label for="username">Username</label>
+				<input type="text" id="username" name="username"><br/>
+				<label for="roomkey">Room key</label>
+				<input type="password" id="roomkey" name="roomkey"><br/>
+				<button id="login" type="button" onclick="submitUser()">Log in</button>
+			</form>
+		</div>
+		
+		<div id="media-queue-container" >
+			<div id="media-table-container" style="display: none;">
+				<table id="media-table"></table>
+			</div>
+			<button id="hide-media-button" style="display: none;" type="button" onclick="hideMediaQueue()">Show queue</button>
+		</div>
+
+		<div id="chat-box-container" style="display: none;">
+			<div id="chat-box-table-container">
+				<table id="chat-box-table">
+				</table>
+			</div>
+			<textarea id="chat-box" rows="1" onkeydown="sendMsg(event)"></textarea>
+		</div>
+
+		
+		<div id="media-queue-request-container">
+		<form>
+			<label for="username">Media URL</label>
+			<input type="text" id="mediasub" name="mediasub">
+			<button type="button" onclick="addToMediaQueue()">Add to queue</button>
+		</form>
+		</div>	
+		<div id="player-container">
+	
+		</div>
+		
+		<div id="foot"></div>
+		
+		
+
+
+		<!--
+		<div id="media-queue-container">
+			<table id="media-table">
+			</table>
+		</div>
+				
+		<form>
+			<label for="username">Media URL</label>
+			<input type="text" id="mediasub" name="mediasub">
+			<button type="button" onclick="addToMediaQueue()">Add to queue</button>
+		</form>
+				
+		<div id="player-container">
+	
+		</div>
+		-->
+	</body>
+</html>
+
+<script>
+fim = [
+    ["https://static.heartshine.gay/g4-fim/s01e01-1080p.mp4", "Friendship is Magic, part 1" ],
+    ["https://static.heartshine.gay/g4-fim/s01e02-1080p.mp4", "Friendship is Magic, part 2" ],
+    ["https://static.heartshine.gay/g4-fim/s01e03-1080p.mp4", "The Ticket Master"           ],
+    ["https://static.heartshine.gay/g4-fim/s01e04-1080p.mp4", "Applebuck Season"            ],
+    ["https://static.heartshine.gay/g4-fim/s01e05-1080p.mp4", "Griffon the Brush Off"       ],
+    ["https://static.heartshine.gay/g4-fim/s01e06-1080p.mp4", "Boast Busters"               ],
+    ["https://static.heartshine.gay/g4-fim/s01e07-1080p.mp4", "Dragonshy"                   ],
+    ["https://static.heartshine.gay/g4-fim/s01e08-1080p.mp4", "Look Before You Sleep"       ],
+    ["https://static.heartshine.gay/g4-fim/s01e09-1080p.mp4", "Bridle Gossip"               ],
+    ["https://static.heartshine.gay/g4-fim/s01e10-1080p.mp4", "Swarm of the Century"        ],
+    ["https://static.heartshine.gay/g4-fim/s01e11-1080p.mp4", "Winter Wrap Up"              ],
+    ["https://static.heartshine.gay/g4-fim/s01e12-1080p.mp4", "Call of the Cutie"           ],
+    ["https://static.heartshine.gay/g4-fim/s01e13-1080p.mp4", "Fall Weather Friends"        ],
+    ["https://static.heartshine.gay/g4-fim/s01e14-1080p.mp4", "Suited For Success"          ],
+    ["https://static.heartshine.gay/g4-fim/s01e15-1080p.mp4", "Feeling Pinkie Keen"         ],
+    ["https://static.heartshine.gay/g4-fim/s01e16-1080p.mp4", "Sonic Rainboom"              ],
+    ["https://static.heartshine.gay/g4-fim/s01e17-1080p.mp4", "Stare Master"                ],
+    ["https://static.heartshine.gay/g4-fim/s01e18-1080p.mp4", "The Show Stoppers"           ],
+    ["https://static.heartshine.gay/g4-fim/s01e19-1080p.mp4", "A Dog and Pony Show"         ],
+    ["https://static.heartshine.gay/g4-fim/s01e20-1080p.mp4", "Green Isn't Your Color"      ],
+    ["https://static.heartshine.gay/g4-fim/s01e21-1080p.mp4", "Over a Barrel"               ],
+    ["https://static.heartshine.gay/g4-fim/s01e22-1080p.mp4", "A Bird in the Hoof"          ],
+    ["https://static.heartshine.gay/g4-fim/s01e23-1080p.mp4", "The Cutie Mark Chronicles"   ],
+    ["https://static.heartshine.gay/g4-fim/s01e24-1080p.mp4", "Owl's Well That Ends Well"   ],
+    ["https://static.heartshine.gay/g4-fim/s01e25-1080p.mp4", "Party of One"                ],
+    ["https://static.heartshine.gay/g4-fim/s01e26-1080p.mp4", "The Best Night Ever"         ],
+    ["https://static.heartshine.gay/g4-fim/s02e01-1080p.mp4", "The Return of Harmony Part 1"        ],
+    ["https://static.heartshine.gay/g4-fim/s02e02-1080p.mp4", "The Return of Harmony Part 2"        ],
+    ["https://static.heartshine.gay/g4-fim/s02e03-1080p.mp4", "Lesson Zero"                         ],
+    ["https://static.heartshine.gay/g4-fim/s02e04-1080p.mp4", "Luna Eclipsed"                       ],
+    ["https://static.heartshine.gay/g4-fim/s02e05-1080p.mp4", "Sisterhooves Social"                 ],
+    ["https://static.heartshine.gay/g4-fim/s02e06-1080p.mp4", "The Cutie Pox"                       ],
+    ["https://static.heartshine.gay/g4-fim/s02e07-1080p.mp4", "May the Best Pet Win!"               ],
+    ["https://static.heartshine.gay/g4-fim/s02e08-1080p.mp4", "The Mysterious Mare Do Well"         ],
+    ["https://static.heartshine.gay/g4-fim/s02e09-1080p.mp4", "Sweet and Elite"                     ],
+    ["https://static.heartshine.gay/g4-fim/s02e10-1080p.mp4", "Secret of My Excess"                 ],
+    ["https://static.heartshine.gay/g4-fim/s02e11-1080p.mp4", "Hearth's Warming Eve"                ],
+    ["https://static.heartshine.gay/g4-fim/s02e12-1080p.mp4", "Family Appreciation Day"             ],
+    ["https://static.heartshine.gay/g4-fim/s02e13-1080p.mp4", "Baby Cakes"                          ],
+    ["https://static.heartshine.gay/g4-fim/s02e14-1080p.mp4", "The Last Roundup"                    ],
+    ["https://static.heartshine.gay/g4-fim/s02e15-1080p.mp4", "The Super Speedy Cider Squeezy 6000" ],
+    ["https://static.heartshine.gay/g4-fim/s02e16-1080p.mp4", "Read It and Weep"                    ],
+    ["https://static.heartshine.gay/g4-fim/s02e17-1080p.mp4", "Hearts and Hooves Day"               ],
+    ["https://static.heartshine.gay/g4-fim/s02e18-1080p.mp4", "A Friend in Deed"                    ],
+    ["https://static.heartshine.gay/g4-fim/s02e19-1080p.mp4", "Putting Your Hoof Down"              ],
+    ["https://static.heartshine.gay/g4-fim/s02e20-1080p.mp4", "It's About Time"                     ],
+    ["https://static.heartshine.gay/g4-fim/s02e21-1080p.mp4", "Dragon Quest"                        ],
+    ["https://static.heartshine.gay/g4-fim/s02e22-1080p.mp4", "Hurricane Fluttershy"                ],
+    ["https://static.heartshine.gay/g4-fim/s02e23-1080p.mp4", "Ponyville Confidential"              ],
+    ["https://static.heartshine.gay/g4-fim/s02e24-1080p.mp4", "MMMystery on the Friendship Express" ],
+    ["https://static.heartshine.gay/g4-fim/s02e25-1080p.mp4", "A Canterlot Wedding - Part 1"        ],
+    ["https://static.heartshine.gay/g4-fim/s02e26-1080p.mp4", "A Canterlot Wedding - Part 2"        ],
+    ["https://static.heartshine.gay/g4-fim/s03e01-1080p.mp4", "The Crystal Empire - Part 1" ],
+    ["https://static.heartshine.gay/g4-fim/s03e02-1080p.mp4", "The Crystal Empire - Part 2" ],
+    ["https://static.heartshine.gay/g4-fim/s03e03-1080p.mp4", "Too Many Pinkie Pies"        ],
+    ["https://static.heartshine.gay/g4-fim/s03e04-1080p.mp4", "One Bad Apple"               ],
+    ["https://static.heartshine.gay/g4-fim/s03e05-1080p.mp4", "Magic Duel"                  ],
+    ["https://static.heartshine.gay/g4-fim/s03e06-1080p.mp4", "Sleepless in Ponyville"      ],
+    ["https://static.heartshine.gay/g4-fim/s03e07-1080p.mp4", "Wonderbolts Academy"         ],
+    ["https://static.heartshine.gay/g4-fim/s03e08-1080p.mp4", "Apple Family Reunion"        ],
+    ["https://static.heartshine.gay/g4-fim/s03e09-1080p.mp4", "Spike at Your Service"       ],
+    ["https://static.heartshine.gay/g4-fim/s03e10-1080p.mp4", "Keep Calm and Flutter On"    ],
+    ["https://static.heartshine.gay/g4-fim/s03e11-1080p.mp4", "Just for Sidekicks"          ],
+    ["https://static.heartshine.gay/g4-fim/s03e12-1080p.mp4", "Games Ponies Play"           ],
+    ["https://static.heartshine.gay/g4-fim/s03e13-1080p.mp4", "Magical Mystery Cure"        ],
+    ["https://static.heartshine.gay/g4-fim/s04e01-1080p.mp4", "Princess Twilight Sparkle - Part 1" ],
+    ["https://static.heartshine.gay/g4-fim/s04e02-1080p.mp4", "Princess Twilight Sparkle - Part 2" ],
+    ["https://static.heartshine.gay/g4-fim/s04e03-1080p.mp4", "Castle Mane-ia"                     ],
+    ["https://static.heartshine.gay/g4-fim/s04e04-1080p.mp4", "Daring Don't"                       ],
+    ["https://static.heartshine.gay/g4-fim/s04e05-1080p.mp4", "Flight to the Finish"               ],
+    ["https://static.heartshine.gay/g4-fim/s04e06-1080p.mp4", "Power Ponies"                       ],
+    ["https://static.heartshine.gay/g4-fim/s04e07-1080p.mp4", "Bats!"                              ],
+    ["https://static.heartshine.gay/g4-fim/s04e08-1080p.mp4", "Rarity Takes Manehattan"            ],
+    ["https://static.heartshine.gay/g4-fim/s04e09-1080p.mp4", "Pinkie Apple Pie"                   ],
+    ["https://static.heartshine.gay/g4-fim/s04e10-1080p.mp4", "Rainbow Falls"                      ],
+    ["https://static.heartshine.gay/g4-fim/s04e11-1080p.mp4", "Three's A Crowd"                    ],
+    ["https://static.heartshine.gay/g4-fim/s04e12-1080p.mp4", "Pinkie Pride"                       ],
+    ["https://static.heartshine.gay/g4-fim/s04e13-1080p.mp4", "Simple Ways"                        ],
+    ["https://static.heartshine.gay/g4-fim/s04e14-1080p.mp4", "Filli Vanilli"                      ],
+    ["https://static.heartshine.gay/g4-fim/s04e15-1080p.mp4", "Twilight Time"                      ],
+    ["https://static.heartshine.gay/g4-fim/s04e16-1080p.mp4", "It Ain't Easy Being Breezies"       ],
+    ["https://static.heartshine.gay/g4-fim/s04e17-1080p.mp4", "Somepony to Watch Over Me"          ],
+    ["https://static.heartshine.gay/g4-fim/s04e18-1080p.mp4", "Maud Pie"                           ],
+    ["https://static.heartshine.gay/g4-fim/s04e19-1080p.mp4", "For Whom the Sweetie Belle Toils"   ],
+    ["https://static.heartshine.gay/g4-fim/s04e20-1080p.mp4", "Leap of Faith"                      ],
+    ["https://static.heartshine.gay/g4-fim/s04e21-1080p.mp4", "Testing Testing 1, 2, 3"            ],
+    ["https://static.heartshine.gay/g4-fim/s04e22-1080p.mp4", "Trade Ya!"                          ],
+    ["https://static.heartshine.gay/g4-fim/s04e23-1080p.mp4", "Inspiration Manifestation"          ],
+    ["https://static.heartshine.gay/g4-fim/s04e24-1080p.mp4", "Equestria Games"                    ],
+    ["https://static.heartshine.gay/g4-fim/s04e25-1080p.mp4", "Twilight's Kingdom - Part 1"        ],
+    ["https://static.heartshine.gay/g4-fim/s04e26-1080p.mp4", "Twilight's Kingdom - Part 2"        ],
+    ["https://static.heartshine.gay/g4-fim/s05e01-1080p.mp4", "The Cutie Map - Part 1"              ],
+    ["https://static.heartshine.gay/g4-fim/s05e02-1080p.mp4", "The Cutie Map - Part 2"              ],
+    ["https://static.heartshine.gay/g4-fim/s05e03-1080p.mp4", "Castle Sweet Castle"                 ],
+    ["https://static.heartshine.gay/g4-fim/s05e04-1080p.mp4", "Bloom & Gloom"                       ],
+    ["https://static.heartshine.gay/g4-fim/s05e05-1080p.mp4", "Tanks for the Memories"              ],
+    ["https://static.heartshine.gay/g4-fim/s05e06-1080p.mp4", "Appleoosa's Most Wanted"             ],
+    ["https://static.heartshine.gay/g4-fim/s05e07-1080p.mp4", "Make New Friends but Keep Discord"   ],
+    ["https://static.heartshine.gay/g4-fim/s05e08-1080p.mp4", "The Lost Treasure of Griffonstone"   ],
+    ["https://static.heartshine.gay/g4-fim/s05e09-1080p.mp4", "Slice of Life"                       ],
+    ["https://static.heartshine.gay/g4-fim/s05e10-1080p.mp4", "Princess Spike"                      ],
+    ["https://static.heartshine.gay/g4-fim/s05e11-1080p.mp4", "Party Pooped"                        ],
+    ["https://static.heartshine.gay/g4-fim/s05e12-1080p.mp4", "Amending Fences"                     ],
+    ["https://static.heartshine.gay/g4-fim/s05e13-1080p.mp4", "Do Princesses Dream of Magic Sheep?" ],
+    ["https://static.heartshine.gay/g4-fim/s05e14-1080p.mp4", "Canterlot Boutique"                  ],
+    ["https://static.heartshine.gay/g4-fim/s05e15-1080p.mp4", "Rarity Investigates!"                ],
+    ["https://static.heartshine.gay/g4-fim/s05e16-1080p.mp4", "Made in Manehattan"                  ],
+    ["https://static.heartshine.gay/g4-fim/s05e17-1080p.mp4", "Brotherhooves Social"                ],
+    ["https://static.heartshine.gay/g4-fim/s05e18-1080p.mp4", "Crusaders of the Lost Mark"          ],
+    ["https://static.heartshine.gay/g4-fim/s05e19-1080p.mp4", "The One Where Pinkie Pie Knows"      ],
+    ["https://static.heartshine.gay/g4-fim/s05e20-1080p.mp4", "Hearthbreakers"                      ],
+    ["https://static.heartshine.gay/g4-fim/s05e21-1080p.mp4", "Scare Master"                        ],
+    ["https://static.heartshine.gay/g4-fim/s05e22-1080p.mp4", "What About Discord?"                 ],
+    ["https://static.heartshine.gay/g4-fim/s05e23-1080p.mp4", "The Hooffields and McColts"          ],
+    ["https://static.heartshine.gay/g4-fim/s05e24-1080p.mp4", "The Mane Attraction"                 ],
+    ["https://static.heartshine.gay/g4-fim/s05e25-1080p.mp4", "The Cutie Re-Mark - Part 1"          ],
+    ["https://static.heartshine.gay/g4-fim/s05e26-1080p.mp4", "The Cutie Re-Mark - Part 2"          ],
+    ["https://static.heartshine.gay/g4-fim/s06e01-1080p.mp4", "The Cutie Map - Part 1"              ],
+    ["https://static.heartshine.gay/g4-fim/s06e02-1080p.mp4", "The Cutie Map - Part 2"              ],
+    ["https://static.heartshine.gay/g4-fim/s06e03-1080p.mp4", "Castle Sweet Castle"                 ],
+    ["https://static.heartshine.gay/g4-fim/s06e04-1080p.mp4", "Bloom & Gloom"                       ],
+    ["https://static.heartshine.gay/g4-fim/s06e05-1080p.mp4", "Tanks for the Memories"              ],
+    ["https://static.heartshine.gay/g4-fim/s06e06-1080p.mp4", "Appleoosa's Most Wanted"             ],
+    ["https://static.heartshine.gay/g4-fim/s06e07-1080p.mp4", "Make New Friends but Keep Discord"   ],
+    ["https://static.heartshine.gay/g4-fim/s06e08-1080p.mp4", "The Lost Treasure of Griffonstone"   ],
+    ["https://static.heartshine.gay/g4-fim/s06e09-1080p.mp4", "Slice of Life"                       ],
+    ["https://static.heartshine.gay/g4-fim/s06e10-1080p.mp4", "Princess Spike"                      ],
+    ["https://static.heartshine.gay/g4-fim/s06e11-1080p.mp4", "Party Pooped"                        ],
+    ["https://static.heartshine.gay/g4-fim/s06e12-1080p.mp4", "Amending Fences"                     ],
+    ["https://static.heartshine.gay/g4-fim/s06e13-1080p.mp4", "Do Princesses Dream of Magic Sheep?" ],
+    ["https://static.heartshine.gay/g4-fim/s06e14-1080p.mp4", "Canterlot Boutique"                  ],
+    ["https://static.heartshine.gay/g4-fim/s06e15-1080p.mp4", "Rarity Investigates!"                ],
+    ["https://static.heartshine.gay/g4-fim/s06e16-1080p.mp4", "Made in Manehattan"                  ],
+    ["https://static.heartshine.gay/g4-fim/s06e17-1080p.mp4", "Brotherhooves Social"                ],
+    ["https://static.heartshine.gay/g4-fim/s06e18-1080p.mp4", "Crusaders of the Lost Mark"          ],
+    ["https://static.heartshine.gay/g4-fim/s06e19-1080p.mp4", "The One Where Pinkie Pie Knows"      ],
+    ["https://static.heartshine.gay/g4-fim/s06e20-1080p.mp4", "Hearthbreakers"                      ],
+    ["https://static.heartshine.gay/g4-fim/s06e21-1080p.mp4", "Scare Master"                        ],
+    ["https://static.heartshine.gay/g4-fim/s06e22-1080p.mp4", "What About Discord?"                 ],
+    ["https://static.heartshine.gay/g4-fim/s06e23-1080p.mp4", "The Hooffields and McColts"          ],
+    ["https://static.heartshine.gay/g4-fim/s06e24-1080p.mp4", "The Mane Attraction"                 ],
+    ["https://static.heartshine.gay/g4-fim/s06e25-1080p.mp4", "The Cutie Re-Mark - Part 1"          ],
+    ["https://static.heartshine.gay/g4-fim/s06e26-1080p.mp4", "The Cutie Re-Mark - Part 2"          ],
+    ["https://static.heartshine.gay/g4-fim/s07e01-1080p.mp4", "The Crystalling - Part 1"         ],
+    ["https://static.heartshine.gay/g4-fim/s07e02-1080p.mp4", "The Crystalling - Part 2"         ],
+    ["https://static.heartshine.gay/g4-fim/s07e03-1080p.mp4", "The Gift of the Maud Pie"         ],
+    ["https://static.heartshine.gay/g4-fim/s07e04-1080p.mp4", "On Your Marks"                    ],
+    ["https://static.heartshine.gay/g4-fim/s07e05-1080p.mp4", "Gauntlet of Fire"                 ],
+    ["https://static.heartshine.gay/g4-fim/s07e06-1080p.mp4", "No Second Prances"                ],
+    ["https://static.heartshine.gay/g4-fim/s07e07-1080p.mp4", "Newbie Dash"                      ],
+    ["https://static.heartshine.gay/g4-fim/s07e08-1080p.mp4", "A Hearth's Warming Tail"          ],
+    ["https://static.heartshine.gay/g4-fim/s07e09-1080p.mp4", "The Saddle Row Review"            ],
+    ["https://static.heartshine.gay/g4-fim/s07e10-1080p.mp4", "Applejack's \"Day\" Off"          ],
+    ["https://static.heartshine.gay/g4-fim/s07e11-1080p.mp4", "Flutter Brutter"                  ],
+    ["https://static.heartshine.gay/g4-fim/s07e12-1080p.mp4", "Spice Up Your Life"               ],
+    ["https://static.heartshine.gay/g4-fim/s07e13-1080p.mp4", "Stranger Than Fan Fiction"        ],
+    ["https://static.heartshine.gay/g4-fim/s07e14-1080p.mp4", "The Cart Before the Ponies"       ],
+    ["https://static.heartshine.gay/g4-fim/s07e15-1080p.mp4", "28 Pranks Later"                  ],
+    ["https://static.heartshine.gay/g4-fim/s07e16-1080p.mp4", "The Times They Are A Changeling"  ],
+    ["https://static.heartshine.gay/g4-fim/s07e17-1080p.mp4", "Dungeons & Discords"              ],
+    ["https://static.heartshine.gay/g4-fim/s07e18-1080p.mp4", "Buckball Season"                  ],
+    ["https://static.heartshine.gay/g4-fim/s07e19-1080p.mp4", "The Fault in Our Cutie Marks"     ],
+    ["https://static.heartshine.gay/g4-fim/s07e20-1080p.mp4", "Viva Las Pegasus"                 ],
+    ["https://static.heartshine.gay/g4-fim/s07e21-1080p.mp4", "Every Little Thing She Does"      ],
+    ["https://static.heartshine.gay/g4-fim/s10e01-1080p.mp4", "My Little Pony: The Movie"        ],
+    ["https://static.heartshine.gay/g4-fim/s07e22-1080p.mp4", "P.P.O.V. (Pony Point of View)"    ],
+    ["https://static.heartshine.gay/g4-fim/s07e23-1080p.mp4", "Where the Apple Lies"             ],
+    ["https://static.heartshine.gay/g4-fim/s07e24-1080p.mp4", "Top Bolt"                         ],
+    ["https://static.heartshine.gay/g4-fim/s07e25-1080p.mp4", "To Where and Back Again - Part 1" ],
+    ["https://static.heartshine.gay/g4-fim/s07e26-1080p.mp4", "To Where and Back Again - Part 2" ],
+    ["https://static.heartshine.gay/g4-fim/s08e01-1080p.mp4", "School Daze - Part 1"        ],
+    ["https://static.heartshine.gay/g4-fim/s08e02-1080p.mp4", "School Daze - Part 2"        ],
+    ["https://static.heartshine.gay/g4-fim/s08e03-1080p.mp4", "The Maud Couple"             ],
+    ["https://static.heartshine.gay/g4-fim/s08e04-1080p.mp4", "Fake It Til You Make It"     ],
+    ["https://static.heartshine.gay/g4-fim/s08e05-1080p.mp4", "Grannies Gone Wild"          ],
+    ["https://static.heartshine.gay/g4-fim/s08e06-1080p.mp4", "Surf and/or Turf"            ],
+    ["https://static.heartshine.gay/g4-fim/s08e07-1080p.mp4", "Horse Play"                  ],
+    ["https://static.heartshine.gay/g4-fim/s08e08-1080p.mp4", "The Parent Map"              ],
+    ["https://static.heartshine.gay/g4-fim/s08e09-1080p.mp4", "Non-Compete Clause"          ],
+    ["https://static.heartshine.gay/g4-fim/s08e10-1080p.mp4", "The Break Up Break Down"     ],
+    ["https://static.heartshine.gay/g4-fim/s08e11-1080p.mp4", "Molt Down"                   ],
+    ["https://static.heartshine.gay/g4-fim/s08e12-1080p.mp4", "Marks for Effort"            ],
+    ["https://static.heartshine.gay/g4-fim/s08e13-1080p.mp4", "The Mean 6"                  ],
+    ["https://static.heartshine.gay/g4-fim/s08e14-1080p.mp4", "A Matter of Principals"      ],
+    ["https://static.heartshine.gay/g4-fim/s08e15-1080p.mp4", "The Hearth's Warming Club"   ],
+    ["https://static.heartshine.gay/g4-fim/s08e16-1080p.mp4", "Friendship University"       ],
+    ["https://static.heartshine.gay/g4-fim/s08e17-1080p.mp4", "The End in Friend"           ],
+    ["https://static.heartshine.gay/g4-fim/s08e18-1080p.mp4", "Yakity-Sax"                  ],
+    ["https://static.heartshine.gay/g4-fim/s08e19-1080p.mp4", "On the Road to Friendship"   ],
+    ["https://static.heartshine.gay/g4-fim/s08e20-1080p.mp4", "The Washouts"                ],
+    ["https://static.heartshine.gay/g4-fim/s08e21-1080p.mp4", "A Rockhoof and a Hard Place" ],
+    ["https://static.heartshine.gay/g4-fim/s08e22-1080p.mp4", "What Lies Beneath"           ],
+    ["https://static.heartshine.gay/g4-fim/s08e23-1080p.mp4", "Sounds of Silence"           ],
+    ["https://static.heartshine.gay/g4-fim/s08e24-1080p.mp4", "Father Knows Beast"          ],
+    ["https://static.heartshine.gay/g4-fim/s08e25-1080p.mp4", "School Raze - Part 1"        ],
+    ["https://static.heartshine.gay/g4-fim/s08e26-1080p.mp4", "School Raze - Part 2"        ],
+    ["https://static.heartshine.gay/g4-fim/s11e01-1080p.mp4", "The Best Gift Ever"          ],
+    ["https://static.heartshine.gay/g4-fim/s09e01-1080p.mp4", "The Beginning of the End - Part 1" ],
+    ["https://static.heartshine.gay/g4-fim/s09e02-1080p.mp4", "The Beginning of the End - Part 2" ],
+    ["https://static.heartshine.gay/g4-fim/s09e03-1080p.mp4", "Uprooted"                          ],                            
+    ["https://static.heartshine.gay/g4-fim/s09e04-1080p.mp4", "Sparkle's Seven"                   ],                     
+    ["https://static.heartshine.gay/g4-fim/s09e05-1080p.mp4", "The Point of No Return"            ],              
+    ["https://static.heartshine.gay/g4-fim/s09e06-1080p.mp4", "Common Ground"                     ],                       
+    ["https://static.heartshine.gay/g4-fim/s09e07-1080p.mp4", "She's All Yak"                     ],                       
+    ["https://static.heartshine.gay/g4-fim/s09e08-1080p.mp4", "Frenemies"                         ],                           
+    ["https://static.heartshine.gay/g4-fim/s09e09-1080p.mp4", "Sweet and Smoky"                   ],                     
+    ["https://static.heartshine.gay/g4-fim/s09e10-1080p.mp4", "Going to Seed"                     ],                       
+    ["https://static.heartshine.gay/g4-fim/s09e11-1080p.mp4", "Student Counsel"                   ],                     
+    ["https://static.heartshine.gay/g4-fim/s09e12-1080p.mp4", "The Last Crusade"                  ],                    
+    ["https://static.heartshine.gay/g4-fim/s09e13-1080p.mp4", "Between Dark and Dawn"             ],               
+    ["https://static.heartshine.gay/g4-fim/s09e14-1080p.mp4", "The Last Laugh"                    ],                      
+    ["https://static.heartshine.gay/g4-fim/s09e15-1080p.mp4", "2, 4, 6, Greaaat"                  ],                    
+    ["https://static.heartshine.gay/g4-fim/s09e16-1080p.mp4", "A Trivial Pursuit"                 ],                   
+    ["https://static.heartshine.gay/g4-fim/s09e17-1080p.mp4", "The Summer Sun Setback"            ],              
+    ["https://static.heartshine.gay/g4-fim/s09e18-1080p.mp4", "She Talks to Angel"                ],                  
+    ["https://static.heartshine.gay/g4-fim/s09e19-1080p.mp4", "Dragon Dropped"                    ],                      
+    ["https://static.heartshine.gay/g4-fim/s09e20-1080p.mp4", "A Horse Shoe-In"                   ],                     
+    ["https://static.heartshine.gay/g4-fim/s09e21-1080p.mp4", "Daring Doubt"                      ],                        
+    ["https://static.heartshine.gay/g4-fim/s09e22-1080p.mp4", "Growing Up is Hard to Do"          ],            
+    ["https://static.heartshine.gay/g4-fim/s09e23-1080p.mp4", "The Big Mac Question"              ],                
+    ["https://static.heartshine.gay/g4-fim/s09e24-1080p.mp4", "The Ending of the End - Part 1"    ],      
+    ["https://static.heartshine.gay/g4-fim/s09e25-1080p.mp4", "The Ending of the End - Part 2"    ],      
+    ["https://static.heartshine.gay/g4-fim/s09e26-1080p.mp4", "The Last Problem"                  ],                    
+]
+
+
+let userAction = true;
+let videoPaused = false;
+let currentlyPlaying = ""
+let socket = null;
+var server = document.getElementById('serverURL');
+let typingtimeout;
+server.addEventListener('input', function(event) {
+	clearTimeout(typingtimeout);
+    typingtimeout = setTimeout(function() {
+		socket = new WebSocket(event.target.value);
+
+		socket.onopen = function(e) {
+			console.log("Connected to server");
+			socket.onmessage = handleMessage;
+			
+			queryServerInformation();
+		};
+    }, 1000);
+});
+
+//socket.onmessage = function(event) {
+function handleMessage(event) {
+	let msg = JSON.parse(event.data);
+	if (msg["type"]) {
+		if (msg["type"] == 3) {
+			alert(msg["msg"]);
+		}
+		
+		if (msg["type"] == 5) {
+			let serverName = msg["serverName"];
+			let userCount  = msg["userCount"];
+			
+			let header = document.getElementById("serverInfoHeader");
+			let subheader = document.getElementById("serverInfoSubheader");
+			header.innerHTML = serverName;
+			//subheader.innerHTML = userCount == 1 ? userCount + " user connected" : userCount + " users connected";
+		}
+		
+		if (msg["type"] == 6) {
+			let formContainer = document.getElementById("form-container");
+			let header = document.getElementById("serverInfoHeader");
+			let subheader = document.getElementById("serverInfoSubheader");
+			let head = document.getElementById("head");
+			let foot = document.getElementById("foot");
+
+			formContainer.style.display = "none";
+			header.style.display = "none";
+			subheader.style.display = "none";
+			head.style.display = "none";
+			foot.style.display = "none";
+			
+			let playerContainer = document.getElementById("player-container");
+			let mediaQueueRequestContainer = document.getElementById("media-queue-request-container");
+			let hideQueueButton = document.getElementById("hide-media-button");
+			let chatBoxContainer = document.getElementById("chat-box-container");
+			
+			chatBoxContainer.style.display = "block";
+			playerContainer.style.display = "block";
+			hideQueueButton.style.display = "block";
+		}
+		
+		if (msg["type"] == 10) {
+			handleMediaQueue(msg)
+		}
+		
+		if (msg["type"] == 11) {
+			var player = document.getElementById('video-player');
+			if (player){
+				player.src = msg["media"];  
+				player.load();
+				player.play();
+			} else {
+				var player = document.createElement('video');
+				player.id = "video-player";
+				player.controls = true; 
+				player.autoplay = true; 
+				player.src = msg["media"]; 
+				var playerContainer = document.getElementById('player-container');
+				playerContainer.appendChild(player);
+				
+				player.addEventListener('pause', function() {
+					if (userAction) {
+						handleVideoPause(player.currentTime);
+					}
+					userAction = true;
+				});
+
+				player.addEventListener('play', function() {
+					if (userAction) {
+						handleVideoPlay(player.currentTime);
+					}
+					userAction = true; 
+				});
+
+				
+				player.addEventListener('seeked', function() {
+					//handleVideoSeek(player.currentTime);
+				});
+				
+				player.addEventListener('ended', function() {
+					handleVideoEnd(player.currentTime);
+				});
+
+			
+				player.currentTime = msg["videoTime"];
+				if (msg["videoPaused"] == false) {
+					userAction = false;
+					player.play()
+				} else if (msg["videoPaused"] == true) {
+					userAction = false;
+					player.pause()
+				}
+			}
+		}
+		
+        if (msg["type"] == 13) {
+            var player = document.getElementById('video-player');
+            if (player) {
+                userAction = false; 
+                player.pause();
+                player.currentTime = msg["videoPauseTime"];
+            }
+        }
+		
+		if (msg["type"] == 15) {
+            var player = document.getElementById('video-player');
+            if (player) {
+                userAction = false;
+                player.currentTime = msg["videoPlayTime"];
+                player.play();
+            }
+        }
+		
+		if (msg["type"] == 20) {
+			var player = document.getElementById('video-player');
+			let data = {
+				"type": 21,
+				"username": msg["username"],
+				"videoTime": player.currentTime,
+				"videoState": player.paused,
+				"video": player.src
+				
+			}
+			socket.send(JSON.stringify(data));
+		}
+		if (msg["type"] == 19) {
+			var player = document.getElementById('video-player');
+			if (player){
+				player.src = msg["video"];  
+				player.load();
+				player.play();
+			} else {
+				var player = document.createElement('video');
+				player.id = "video-player";
+				player.controls = true; 
+				player.autoplay = true; 
+				player.src = msg["video"]; 
+				var playerContainer = document.getElementById('player-container');
+				playerContainer.appendChild(player);
+				
+				player.addEventListener('pause', function() {
+					if (userAction) {
+						handleVideoPause(player.currentTime);
+					}
+					userAction = true;
+				});
+
+				player.addEventListener('play', function() {
+					if (userAction) {
+						handleVideoPlay(player.currentTime);
+					}
+					userAction = true; 
+				});
+
+				
+				player.addEventListener('seeked', function() {
+					//handleVideoSeek(player.currentTime);
+				});
+				
+				player.addEventListener('ended', function() {
+					handleVideoEnd(player.currentTime);
+				});
+
+			
+				player.currentTime = msg["videoTime"];
+				if (msg["videoPaused"] == false) {
+					userAction = false;
+					player.play()
+				} else if (msg["videoPaused"] == true) {
+					userAction = false;
+					player.pause()
+				}
+			}
+		}
+		
+		if (msg["type"] == 22) {
+			var player = document.getElementById('video-player');
+			player.ended = true;
+			removeLeadingFromMediaQueue();
+		}
+		
+		if (msg["type"] == 25) {
+			handleChatMessage(msg);
+		}
+		
+		if (msg["type"] == 26) {
+			handleChatAnnouncementMessage(msg);
+		}
+	}
+};
+
+function handleChatAnnouncementMessage(msg) {
+    var table = document.getElementById("chat-box-table");
+    var row = document.createElement("tr");
+
+    var message = document.createElement("td");
+	message.id = "msg";
+	message.style.color = "white";
+    message.textContent = msg["message"];
+    row.appendChild(message);
+
+    table.appendChild(row);
+}
+
+function handleChatMessage(msg) {
+    var table = document.getElementById("chat-box-table");
+    var row = document.createElement("tr");
+
+    var time = document.createElement("td");
+    time.id = "msgTime";
+    time.textContent = msg["timestamp"]  + " ";
+    row.appendChild(time);
+
+    var sender = document.createElement("td");
+    sender.id = "msgSender";
+    sender.textContent = msg["sender"] + ": ";
+    sender.style.color = msg["color"];
+    row.appendChild(sender);
+
+    var message = document.createElement("td");
+    message.id = "msg";
+    var messageText = msg["message"];
+
+    var words = messageText.split(" ");
+    var processedMessage = "";
+
+    words.forEach(function(word) {
+        var replaced = false;
+        emoteAssociations.forEach(function(association) {
+            if (word.toLowerCase() === association[0]) {
+                var img = document.createElement("img");
+                img.src = association[1];
+                img.alt = word;
+                img.width = "32";
+                img.height = "32";
+                processedMessage += " ";
+                processedMessage += img.outerHTML; 
+                processedMessage += " ";
+                replaced = true;
+            }
+        });
+        if (!replaced) {
+            processedMessage += (processedMessage ? " " : "") + word;
+        }
+    });
+
+    message.innerHTML = processedMessage;
+    row.appendChild(message);
+
+    table.appendChild(row);
+
+    var chatBoxTableContainer = document.getElementById("chat-box-table-container");
+    chatBoxTableContainer.scrollTop = chatBoxTableContainer.scrollHeight;
+}
+
+
+
+function submitUser() {
+	console.log("submitting user login request");
+	let username = document.getElementById("username").value;
+	let roomkey = document.getElementById("roomkey").value;
+	let data = {
+		"type": 1,
+		"username": username,
+		"roomkey": roomkey
+	}
+	socket.send(JSON.stringify(data));
+}
+
+function addToMediaQueue() {
+    console.log("adding to media queue");
+    let mediaURLInput = document.getElementById("mediasub");
+    let mediaURL = mediaURLInput.value.trim();
+    let urlPattern = /^(http|https):\/\/[^ "]+$/;
+    
+    if (mediaURL.match(urlPattern)) {
+        let data = {
+            "type": 9,
+            "mediaURL": mediaURL
+        };
+        socket.send(JSON.stringify(data));
+        mediaURLInput.value = "";
+    } else {
+        alert("Please enter a valid URL.");
+    }
+}
+
+function removeLeadingFromMediaQueue() {
+	console.log(document.getElementById("media-table").rows.length  + "removeLeadingFromMediaQueue");
+    if (document.getElementById("media-table").rows.length > 0) {
+        document.getElementById("media-table").deleteRow(0);
+    }
+}
+
+
+
+
+function queryServerInformation() {
+	console.log("querying server info");
+	let data = {
+		"type": 4
+	}
+	socket.send(JSON.stringify(data));
+}
+
+function handleVideoPause(pauseTime) {
+    let data = {
+        "type": 12,
+        "videoPauseTime": pauseTime
+    };
+    socket.send(JSON.stringify(data));
+}
+
+function handleVideoPlay(playTime) {
+    let data = {
+        "type": 14,
+        "videoPlayTime": playTime
+    };
+    socket.send(JSON.stringify(data));
+}
+
+function handleVideoSeek(seekTime) {
+	let data = {
+		"type": 16,
+		"videoSeekTime": seekTime
+	}
+	socket.send(JSON.stringify(data));
+}
+
+function handleVideoEnd() {
+	console.log("handleVideoEnd");
+	let data = { "type": 23 }
+	socket.send(JSON.stringify(data));
+	//var player = document.getElementById('video-player');
+	//if (player)
+	//	player.remove();
+	
+	removeLeadingFromMediaQueue();
+}
+
+function hideMediaQueue() {
+    let mediaQueueContainer = document.getElementById("media-table-container");
+    let hideQueueButton = document.getElementById("hide-media-button");
+
+    if (mediaQueueContainer.style.display === "none") {
+        hideQueueButton.innerHTML = "Hide queue";
+        mediaQueueContainer.style.display = "block";
+    } else {
+        hideQueueButton.innerHTML = "Show queue";
+        mediaQueueContainer.style.display = "none";
+    }
+}
+
+
+var playerExists = false;
+var currentTime = 0;
+var isPlaying = false;
+
+var updatePlayerStatus = setInterval(function() {
+	var player = document.getElementById('video-player');
+	if (player)
+		playerExists = true;
+		
+	currentTime = formatTime(player.currentTime) + " / " + formatTime(player.duration) + "  ";
+	isPlaying = player.paused ? '▶  ' : '❚❚  ';
+	
+	var state = document.getElementById("media-queue-row-state");
+	var time  = document.getElementById("media-queue-row-time");
+	if (state && time) {
+		state.textContent = isPlaying;
+		time.textContent = currentTime;
+	}
+}, 1000);
+
+function handleMediaQueue(msg) {
+	var table = document.getElementById("media-table");
+	while (table.firstChild) {
+		table.removeChild(table.firstChild);
+	}
+
+	var queue = msg["queue"];
+	for (var i = 0; i < queue.length; i++) {
+		var row = document.createElement("tr");
+		var doesArrayHaveURL = fim.find(item => item[0] === queue[i]);
+		
+		if (i == 0) {
+				var state = document.createElement("td");
+				state.textContent = isPlaying
+				state.id = "media-queue-row-state";
+				row.appendChild(state);
+				
+				var time = document.createElement("td");
+				time.id = "media-queue-row-time";
+				time.textContent = currentTime
+				row.appendChild(time);
+		}
+		var data = document.createElement("td");
+		data.id = "media-queue-row";
+		data.textContent = doesArrayHaveURL ? doesArrayHaveURL[1] : queue[i];	
+		row.appendChild(data);
+		
+		table.appendChild(row);
+	}
+}
+
+function formatTime(seconds) {
+    var minutes = Math.floor(seconds / 60);
+    var remainingSeconds = Math.floor(seconds % 60);
+    return (minutes < 10 ? '0' : '') + minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
+}
+
+
+
+function sendMsg(event) {
+	if (event.key === 'Enter') {
+		event.preventDefault();
+		var text = document.getElementById('chat-box').value.trim();
+		if (text !== '') {
+			let data = {
+				"type": 24,
+				"message": text,
+				"timestamp": Date.now()
+			};
+			socket.send(JSON.stringify(data));
+			document.getElementById('chat-box').value = '';
+		}
+		
+	}
+}
+
+emoteAssociations = [
+	["dab", "https://i.imgur.com/OZ2KHvA.png"],
+	["itsover", "https://i.imgur.com/oh8ex8u.png"]
+]
+</script>
