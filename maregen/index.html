@@ -47,6 +47,10 @@
 		min-height: 450px;
 		display: none;
 	}
+
+	#seedcontainer {
+		display: none;
+	}
 	
 	#seedlabel {
 		padding: 0rem 1rem 0rem 1rem;
@@ -237,6 +241,7 @@ var save = document.getElementById('save');
 var seedtxt = document.getElementById('seedtxt');
 var friend = document.getElementById('yournewbestfriend');
 var friendcontainer = document.getElementById('friendcontainer');
+var seedcontainer = document.getElementById('seedcontainer');
 var friendReady = false;
 seedtxt.disabled = true;
 save.disabled = true;
@@ -252,7 +257,7 @@ function loadSVG() {
 var letterCounter = 0;
 
 function calcSeed() {
-    seed = seedtxt.value || String(Math.floor(Math.random() * new Date().getTime())).toString();
+    seed = String(Math.floor(Math.random() * new Date().getTime())).toString();
 	console.log(seed);
 }
 
@@ -270,6 +275,7 @@ seedtxt.addEventListener('input', function() {
 });
 
 gimme.addEventListener('click', () => {
+	seedcontainer.style.display = "block";
     gimme.innerHTML = "Give me another.";
 	calcSeed()
     giveFriend();
@@ -299,15 +305,25 @@ function sendSVGToCanvas() {
         ctx.textBaseline = 'top';
         ctx.strokeText(text, x, y);
         ctx.fillText(text, x, y); 
+		
+		if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) { 
+			var link = document.createElement('a');
+			link.download = seed + '.png';
+			canvas.toBlob(function(blob) {
+				link.href = URL.createObjectURL(blob);
+				link.click();
+			}, 'image/png');
+		} else {
+			canvas.toBlob(function(blob) {
+				var item = new ClipboardItem({ 'image/png': blob });
+				navigator.clipboard.write([item]).then(function() {
+					alert('Your mare has been copied to the clipboard.\nSeed: ' + seed);
+				}, function(error) {
+					alert('Unable to copy image to clipboard:', error);
+				});
+			});
+		}
 
-        canvas.toBlob(function(blob) {
-            var item = new ClipboardItem({ 'image/png': blob });
-            navigator.clipboard.write([item]).then(function() {
-                alert('Your mare is copied to the clipboard.\nSeed: ' + seed);
-            }, function(error) {
-                console.error('Unable to copy image to clipboard:', error);
-            });
-        });
     };
 }
 
@@ -456,7 +472,7 @@ function giveFriend() {
 		
        
 		save.disabled = true;
-		seedtxt.value = "";
+		seedtxt.value = seed;
 		seedtxt.disabled = true;
 		gimme.disabled = true;
 		animationTimer = setTimeout(() => {
@@ -464,7 +480,7 @@ function giveFriend() {
 			friend.classList.remove('zoomingIn', 'rot8in', 'rot8infast');
 			save.disabled = false;
 			gimme.disabled = false;
-			seedtxt.value = "";
+			seedtxt.value = seed;
 			seedtxt.disabled = false;
 		}, 1000);
 
@@ -472,7 +488,7 @@ function giveFriend() {
 		friend.classList.add('zoomingOut', 'rot8out');
 		gimme.disabled = true;
 		save.disabled = true;
-		seedtxt.value = "";
+		seedtxt.value = seed;
 		seedtxt.disabled = true;
 		friend.addEventListener('animationend', function() {
 			friend.classList.remove('zoomingOut', 'rot8out');
