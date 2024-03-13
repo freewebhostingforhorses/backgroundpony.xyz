@@ -35,6 +35,7 @@
 		box-shadow: 5px 5px #aaaaaa;
 		cursor: pointer;
 		letter-spacing: .2rem;
+		display: none;
 	}
 	
 	#friendcontainer {
@@ -376,14 +377,43 @@ function prepareColors() {
 
 runs = 0;
 
+var scrunchChance = Math.random() < 0.01;
 var alicornChance = Math.random() < 0.0052;
 var unicornChance = (!alicornChance) && (Math.random() < 0.33); 
 var pegasusChance = (!alicornChance) && (!unicornChance) && (Math.random() < 0.33); 
 
+
 function setColors() {
+	scrunchChance = Math.random() < 0.01;
     alicornChance = Math.random() < 0.0052;
     unicornChance = (!alicornChance) && (Math.random() < 0.33); 
     pegasusChance = (!alicornChance) && (!unicornChance) && (Math.random() < 0.33); 
+	
+	unicornPaths = [
+		"path51",
+		"path52",
+		"path53",
+		"path54"
+	]
+	
+	pegasusPaths = [
+		"path16",
+		"path17",
+		"path20",
+		"path21"
+	]
+	
+	smilePaths = [
+		"path40",
+		"path41",
+		"path42"
+	]
+	
+	scrunchPaths = [
+		"path63",
+		"path64",
+		"path65"
+	]
 	
 	if (alicornChance) {
 		alert("You found a rare alicorn! Make sure to preserve it for future studies.");
@@ -394,20 +424,29 @@ function setColors() {
 	paths.forEach(function(path) {
 		var fillColor = path.getAttribute('fill');
 		
-		if (alicornChance) {
-		} else if (pegasusChance) {
-			if (path.id == "path53-9" || path.id == "path50-0" || path.id == "path49-7" || path.id == "path45-0" || path.id == "path44-1") {
-				path.style.display = 'none'; 
-			}
-		} else if (unicornChance) {
-			if (path.id == "path51" || path.id == "path50" || path.id == "path49" || path.id == "path48") {
+		if (scrunchChance) {
+			if (smilePaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
 		} else {
-			if (path.id == "path53-9" || path.id == "path50-0" || path.id == "path49-7" || path.id == "path45-0" || path.id == "path44-1" || path.id == "path51" || path.id == "path50" || path.id == "path49" || path.id == "path48") {
+			if (scrunchPaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
 		}
+		
+		if (pegasusChance) {
+			if (pegasusPaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+		} 
+		
+		if (unicornChance) {
+			if (unicornPaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+		}
+		
+
 		
 		if (fillColor == "#b10000") {
 			path.style.setProperty('fill', bodyColor, 'important');
@@ -471,8 +510,9 @@ function setColors() {
 
 function giveFriend() { 
     if (!friendReady) {
-	loadSVG();
-	
+		loadSVG();
+		save.style.display = "inline-block";
+		
         friend.style.display = "block";
         friendcontainer.style.display = "block";
 		
