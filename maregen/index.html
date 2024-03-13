@@ -1,0 +1,340 @@
+<style>
+	#header {
+		font-size: 4.5rem;
+		font-family: Arial, sans-serif;
+		font-weight: 600;
+		line-spacing: 500;
+		text-align: center;
+		letter-spacing: .25rem;
+	}
+	
+	body {
+		margin: 2rem;
+		background-color: efefef;
+		text-align: center;
+	}
+	
+	#gimme {
+		padding: 1rem 3rem 1rem 3rem;
+		font-size: 1.5rem;
+		font-family: Arial, sans-serif;
+		font-weight: 600;
+		border: 3px solid black;
+		box-shadow: 5px 5px #aaaaaa;
+		cursor: pointer;
+		letter-spacing: .2rem;
+		outline: none;
+	}
+	
+	#save {
+		padding: 1rem 3rem 1rem 3rem;
+		font-size: 1.5rem;
+		font-family: Arial, sans-serif;
+		font-weight: 600;
+		border: 3px solid black;
+		box-shadow: 5px 5px #aaaaaa;
+		cursor: pointer;
+		letter-spacing: .2rem;
+	}
+	
+	#friendcontainer {
+		padding: 3rem; 
+		margin: 0 auto;
+		margin-bottom: 4rem;
+		border: 3px solid black;
+		max-width: 450px;
+		min-width: 450px;
+		min-height: 450px;
+		display: none;
+	}
+	
+	#yournewbestfriend {
+		max-width: 450px;
+		display: none;
+	}
+	
+	@keyframes zoomIn {
+		0% {
+			opacity: 0;
+			transform: scale(0);
+		}
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+	
+	@keyframes zoomOut {
+		0% {
+			opacity: 1;
+			transform: scale(1);
+		}
+		100% {
+			opacity: 0;
+			transform: scale(0);
+		}
+	}
+	
+	
+	@keyframes rotateIn {
+		0% {
+			transform: rotate(-60deg);
+		}
+		
+		5% {
+			transform: rotate(-65deg);
+		}
+		
+		55% {
+			transform: rotate(3deg);
+		}
+		
+		100% {
+			transform: rotate(0deg);
+		}
+	}
+
+
+	@keyframes rotateInFast {
+		0% {
+			opacity: 0;
+			transform: rotate(-10deg);
+		}
+		
+		3% {
+			transform: scale(1.1) rotate(-15deg);
+		}
+		
+		100% {
+			opacity: 1;
+			transform: scale(1) rotate(0deg);
+		}
+	}
+
+	
+	@keyframes rotateOut {
+		0% {
+			opacity: 1;
+			transform: scale(1) rotate(0deg);
+		}
+					
+		60% {
+			opacity: 0;
+			transform: scale(0) rotate(-520deg);
+		}
+		
+		100% {
+			opacity: 0;
+			transform: scale(0) rotate(-520deg);
+		}
+	}
+
+
+	.zoomingIn {
+		animation: zoomIn 1s forwards; 
+	}
+	
+	.zoomingOut {
+		animation: zoomOut 1s forwards; 
+	}
+	
+	.rot8in {
+		animation: rotateIn 1s forwards;
+	}
+
+	.rot8infast {
+		animation: rotateInFast 0.35s forwards;
+	}
+
+	.rot8out {
+		animation: rotateOut 2s ease forwards; 
+	}
+
+
+</style>
+
+<title>MARE GENERATOR</title>
+
+<body>
+	<p id="header">MARE Generator</p>
+	<div id="friendcontainer">
+		<div id="yournewbestfriend"></div>
+	</div>
+	<button id="gimme">I want a friend.</button>
+</body>
+
+<script>
+var gimme = document.getElementById('gimme');
+var friend = document.getElementById('yournewbestfriend');
+var friendcontainer = document.getElementById('friendcontainer');
+var friendReady = false;
+
+function loadSVG() {
+    fetch('./real.svg').then(response => response.text()).then(svgData => {
+        friend.innerHTML = svgData;
+        prepareColors();
+        setColors();
+    });
+}
+gimme.addEventListener('click', () => {
+    gimme.innerHTML = "Give me another.";
+    giveFriend();
+});
+
+const randomHexColorCode = () => {
+  let n = (Math.random() * 0xfffff * 1000000).toString(16);
+  return '#' + n.slice(0, 6);
+};
+
+function LightenDarkenColor(col, amt) {
+  
+    var usePound = true;
+  
+    if (col[0] == "#") {
+        col = col.slice(1);
+        usePound = true;
+    }
+ 
+    var num = parseInt(col, 16);
+ 
+    var r = ((num >> 16) + amt) < 0 ? 0 : ((num >> 16) + amt > 255 ? 255 : (num >> 16) + amt);
+    var b = (((num >> 8) & 0x00FF) + amt) < 0 ? 0 : (((num >> 8) & 0x00FF) + amt > 255 ? 255 : ((num >> 8) & 0x00FF) + amt);
+    var g = ((num & 0x0000FF) + amt) < 0 ? 0 : ((num & 0x0000FF) + amt > 255 ? 255 : (num & 0x0000FF) + amt);
+ 
+    return (usePound ? "#" : "") + ((1 << 24) + (r << 16) + (b << 8) + g).toString(16).slice(1);
+  
+}
+function prepareColors() { 
+	eyeColor = randomHexColorCode()
+
+	maneBackColor = randomHexColorCode()
+	maneBackColorOutline     = LightenDarkenColor(maneBackColor, -35)
+	maneFrontColor = randomHexColorCode()
+	maneFrontColorOutline     = LightenDarkenColor(maneFrontColor, -35)
+
+	bodyColor = randomHexColorCode()
+	bodyColorOutline     = LightenDarkenColor(bodyColor, -65)
+	bodyColorBack        = LightenDarkenColor(bodyColor, -32)
+	bodyColorBackOutline = LightenDarkenColor(bodyColor, -75)
+}
+
+runs = 0;
+
+var alicornChance = Math.random() < 0.0052;
+var unicornChance = (!alicornChance) && (Math.random() < 0.33); 
+var pegasusChance = (!alicornChance) && (!unicornChance) && (Math.random() < 0.33); 
+
+function setColors() {
+    var alicornChance = Math.random() < 0.0052;
+    var unicornChance = (!alicornChance) && (Math.random() < 0.33); 
+    var pegasusChance = (!alicornChance) && (!unicornChance) && (Math.random() < 0.33); 
+	
+
+	var paths = friend.querySelectorAll('[d]');
+
+	paths.forEach(function(path) {
+		var fillColor = path.getAttribute('fill');
+		
+		if (alicornChance) {
+		} else if (pegasusChance) {
+			if (path.id == "path53-9" || path.id == "path50-0" || path.id == "path49-7" || path.id == "path45-0" || path.id == "path44-1") {
+				path.style.display = 'none'; 
+			}
+		} else if (unicornChance) {
+			if (path.id == "path51" || path.id == "path50" || path.id == "path49" || path.id == "path48") {
+				path.style.display = 'none'; 
+			}
+		} else {
+			if (path.id == "path53-9" || path.id == "path50-0" || path.id == "path49-7" || path.id == "path45-0" || path.id == "path44-1" || path.id == "path51" || path.id == "path50" || path.id == "path49" || path.id == "path48") {
+				path.style.display = 'none'; 
+			}
+		}
+		
+		if (fillColor == "#b10000") {
+			path.setAttribute('fill', bodyColor);
+		}
+		
+		if (!fillColor || fillColor == "#000000") {
+			path.setAttribute('fill', bodyColorOutline);
+		}
+		
+		if (fillColor == "#474747") {
+			path.setAttribute('fill', bodyColorBackOutline);
+		}
+		
+		if (fillColor == "#800000") {
+			path.setAttribute('fill', bodyColorBack);
+		}
+		
+		if (fillColor == "#ff00f1") {
+			path.setAttribute('fill', maneBackColor);
+		}
+		
+		if (fillColor == "#3dff00") {
+			path.setAttribute('fill', maneFrontColor);
+		}
+		
+		if (fillColor == "#ff0000") {
+			path.setAttribute('fill', maneBackColorOutline);
+		}
+		
+		if (fillColor == "#0000ff") {
+			path.setAttribute('fill', maneFrontColorOutline);
+		}
+	});
+	
+	var gradients = friend.querySelectorAll('linearGradient');
+
+	gradients.forEach(function(gradient) {
+		var stops = gradient.querySelectorAll('stop');
+		stops.forEach(function(stop) {
+			if (stop.getAttribute('stop-color') == 'red') {
+				stop.setAttribute('stop-color', eyeColor);
+			}
+		});
+	});
+}
+
+function giveFriend() { 
+
+
+	if (alicornChance) {
+		alert("You found a rare alicorn! Make sure to preserve it for future studies.");
+	}
+	
+    if (!friendReady) {
+	loadSVG();
+	
+        friend.style.display = "block";
+        friendcontainer.style.display = "block";
+		
+		if (runs == 0) {
+			friend.classList.add('zoomingIn', 'rot8in');
+			friendcontainer.classList.add('zoomingIn');
+			runs += 1;
+		} else {
+			friend.classList.add('zoomingIn', 'rot8infast');
+		}
+
+        friendReady = true;
+		
+       
+		gimme.disabled = true;
+		animationTimer = setTimeout(() => {
+			friendcontainer.classList.remove('zoomingIn');
+			friend.classList.remove('zoomingIn', 'rot8in');
+			gimme.disabled = false;
+		}, 1000);
+
+	} else if (friendReady) {
+		friend.classList.add('zoomingOut', 'rot8out');
+		gimme.disabled = true;
+		friend.addEventListener('animationend', function() {
+			friend.classList.remove('zoomingOut', 'rot8out');
+			friendReady = false;
+			friend.innerHTML = "";
+			giveFriend();
+		}, { once: true });
+	}
+}
+</script>
