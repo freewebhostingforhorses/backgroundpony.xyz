@@ -208,6 +208,7 @@
 	#canvas {
 		display: none;
 	}
+
 </style>
 
 <title>MARE GENERATOR</title>
@@ -283,15 +284,16 @@ gimme.addEventListener('click', () => {
 
 function sendSVGToCanvas() {
     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
-    var img = new Image();
+    svgString = svgString.replace('<svg width="450" height="450"', '<svg width="720" height="720"');
+	var img = new Image();
     img.src = 'data:image/svg+xml;base64,' + btoa(svgString);
     var canvas = document.getElementById('canvas');
     canvas.width = 720;
     canvas.height = 720;
     var ctx = canvas.getContext('2d');
+	
     img.onload = function() {
         ctx.drawImage(img, 0, 0);
-
         var text = 'Seed: ' + seed;
         var fontSize = 40;
         var x = canvas.width;
@@ -306,13 +308,15 @@ function sendSVGToCanvas() {
         ctx.strokeText(text, x, y);
         ctx.fillText(text, x, y); 
 		
-		if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) { 
+		if (/iPhone|iPad|iPod/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent) || /Firefox/i.test(navigator.userAgent)) { 
 			var link = document.createElement('a');
 			link.download = seed + '.png';
 			canvas.toBlob(function(blob) {
+				var link = document.createElement('a');
 				link.href = URL.createObjectURL(blob);
 				link.click();
 			}, 'image/png');
+
 		} else {
 			canvas.toBlob(function(blob) {
 				var item = new ClipboardItem({ 'image/png': blob });
@@ -323,7 +327,6 @@ function sendSVGToCanvas() {
 				});
 			});
 		}
-
     };
 }
 
@@ -407,36 +410,49 @@ function setColors() {
 		}
 		
 		if (fillColor == "#b10000") {
-			path.setAttribute('fill', bodyColor);
+			path.style.setProperty('fill', bodyColor, 'important');
 		}
-		
+
 		if (!fillColor || fillColor == "#000000") {
-			path.setAttribute('fill', bodyColorOutline);
+			path.style.setProperty('fill', bodyColorOutline, 'important');
 		}
-		
+
+		if (fillColor == "#010000") {
+			path.style.setProperty('fill', "#000000", 'important');
+		}
+
+		if (fillColor == "#030202") {
+			path.style.setProperty('fill', "#000000", 'important');
+		}
+
+		if (fillColor == "#ffffff") {
+			path.style.setProperty('fill', "#FFFFFF", 'important');
+		}
+
 		if (fillColor == "#474747") {
-			path.setAttribute('fill', bodyColorBackOutline);
+			path.style.setProperty('fill', bodyColorBackOutline, 'important');
 		}
-		
+
 		if (fillColor == "#800000") {
-			path.setAttribute('fill', bodyColorBack);
+			path.style.setProperty('fill', bodyColorBack, 'important');
 		}
-		
+
 		if (fillColor == "#ff00f1") {
-			path.setAttribute('fill', maneBackColor);
+			path.style.setProperty('fill', maneBackColor, 'important');
 		}
-		
+
 		if (fillColor == "#3dff00") {
-			path.setAttribute('fill', maneFrontColor);
+			path.style.setProperty('fill', maneFrontColor, 'important');
 		}
-		
+
 		if (fillColor == "#ff0000") {
-			path.setAttribute('fill', maneBackColorOutline);
+			path.style.setProperty('fill', maneBackColorOutline, 'important');
 		}
-		
+
 		if (fillColor == "#0000ff") {
-			path.setAttribute('fill', maneFrontColorOutline);
+			path.style.setProperty('fill', maneFrontColorOutline, 'important');
 		}
+
 	});
 	
 	var gradients = friend.querySelectorAll('linearGradient');
