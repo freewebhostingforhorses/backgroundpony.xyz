@@ -36,6 +36,7 @@
 		cursor: pointer;
 		letter-spacing: .2rem;
 		display: none;
+		outline: none;
 	}
 	
 	#friendcontainer {
@@ -377,17 +378,25 @@ function prepareColors() {
 
 runs = 0;
 
-var scrunchChance = Math.random() < 0.01;
-var alicornChance = Math.random() < 0.0052;
-var unicornChance = (!alicornChance) && (Math.random() < 0.33); 
-var pegasusChance = (!alicornChance) && (!unicornChance) && (Math.random() < 0.33); 
-
-
 function setColors() {
-	scrunchChance = Math.random() < 0.01;
-    alicornChance = Math.random() < 0.0052;
-    unicornChance = (!alicornChance) && (Math.random() < 0.33); 
-    pegasusChance = (!alicornChance) && (!unicornChance) && (Math.random() < 0.33); 
+
+
+	randomAlicorn = Math.random();
+	alicornChance = randomAlicorn < 0.0052;
+
+	randomUnicorn = Math.random();
+	unicornChance = (!alicornChance) && (randomUnicorn < 0.33); 
+
+	randomPegasus = Math.random();
+	pegasusChance = (!alicornChance) && (!unicornChance) && (randomPegasus < 0.33);
+
+	randomScrunch = Math.random();
+	scrunchChance = randomScrunch < 0.01;
+
+	//console.log("Random Scrunch:", randomScrunch);
+	//console.log("Random Alicorn:", randomAlicorn);
+	//console.log("Random Unicorn:", randomUnicorn);
+	//console.log("Random Pegasus:", randomPegasus);
 	
 	unicornPaths = [
 		"path51",
@@ -425,28 +434,31 @@ function setColors() {
 		var fillColor = path.getAttribute('fill');
 		
 		if (scrunchChance) {
+			//console.log("scrunch");
 			if (smilePaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
 		} else {
+			//console.log("noscrunch");
 			if (scrunchPaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
 		}
 		
-		if (pegasusChance) {
+		if (alicornChance) {
+		} else if (pegasusChance) {
 			if (pegasusPaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
-		} 
-		
-		if (unicornChance) {
+		} else if (unicornChance) {
 			if (unicornPaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
-		}
-		
-
+		} else {
+			if (unicornPaths.includes(path.id) || pegasusPaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+		} 
 		
 		if (fillColor == "#b10000") {
 			path.style.setProperty('fill', bodyColor, 'important');
