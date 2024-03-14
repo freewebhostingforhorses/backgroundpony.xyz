@@ -218,7 +218,8 @@
 <body>
 	<p id="header">MARE Generator</p>
 	<div id="friendcontainer">
-		<div id="yournewbestfriend"></div>
+			<object id="yournewbestfriend" type="image/svg+xml" data="real.svg" width="450" height="450">
+			</object>
 	</div>
 	
 	<div id="seedcontainer">
@@ -244,6 +245,7 @@ var friend = document.getElementById('yournewbestfriend');
 var friendcontainer = document.getElementById('friendcontainer');
 var seedcontainer = document.getElementById('seedcontainer');
 var friendReady = false;
+var loaded = false;
 seedtxt.disabled = true;
 save.disabled = true;
 
@@ -252,13 +254,16 @@ function isMobileDevice() {
 }
 
 function loadSVG() {
-    fetch('./real.svg').then(response => response.text()).then(svgData => {
-        svgData = svgData.replace(/width="[\d\.]+"/g, 'width="450"');
-        svgData = svgData.replace(/height="[\d\.]+"/g, 'height="450"');
-        friend.innerHTML = svgData;
-        prepareColors();
-        setColors();
-    });
+	document.getElementById('yournewbestfriend').addEventListener('load', function() {
+		loaded = true;
+		prepareColors();
+		setColors();
+	});
+
+	if (loaded) {
+		prepareColors();
+		setColors();
+	}
 }
 
 var letterCounter = 0;
@@ -282,7 +287,6 @@ seedtxt.addEventListener('input', function() {
 });
 
 
-
 gimme.addEventListener('click', () => {
 	seedcontainer.style.display = "block";
     gimme.innerHTML = "Give me another.";
@@ -291,7 +295,7 @@ gimme.addEventListener('click', () => {
 });
 
 function sendSVGToCanvas() {
-    var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+    var svgString = new XMLSerializer().serializeToString(friend.contentDocument.querySelector('svg'));
     svgString = svgString.replace(/width="[\d\.]+"/g, 'width="720"');
     svgString = svgString.replace(/height="[\d\.]+"/g, 'height="720"');
 	var img = new Image();
@@ -388,10 +392,9 @@ function prepareColors() {
 runs = 0;
 
 function setColors() {
-
-
 	randomAlicorn = Math.random();
 	alicornChance = randomAlicorn < 0.0052;
+	//alicornChance = 1;
 
 	randomUnicorn = Math.random();
 	unicornChance = (!alicornChance) && (randomUnicorn < 0.33); 
@@ -455,10 +458,11 @@ function setColors() {
 		"path9-6",
 		"path10-5",
 		"path8-8",
+		
 		"path54",
 		"path53",
 		"path52",
-		"path51"
+		"path51",
 	]
 	
 	pointyManePaths = [
@@ -474,53 +478,176 @@ function setColors() {
 		"path5",
 		"path6",
 		"path7",
+		
 		"path51-8",
 		"path52-0",
 		"path53-2",
 		"path54-0"
 	]
 	
+	bodyPaths = [
+		"path54",
+		"path53",
+		"path52",
+		"path52-0",
+		"path53-2",
+		"path54-0",
+		"path13",
+		"path21",
+		"path18",
+		"path60",
+		"path40",
+		"path63",
+		"path17",
+		"path20",
+		"path8",
+	]
+	
+	bodyOutlinePaths = [
+		"path51",
+		"path51-8",
+		"path12",
+		"path41",
+		"path42",
+		"path64",
+		"path65",
+		"path11",
+		"path27",
+		"path16",
+		"path14",
+		"path61",
+		"path62",
+	]
+	
+	bodyDarkPaths = [
+		"path9",
+	]
+	
+	bodyOutlineDarkPaths = [
+		"path10",
+	]
+	
+	frontManePaths = [
+		"path7",
+		"path56",
+		"path59",
+	]
+	
+	frontManeOutlinePaths = [
+		"path6",,
+		"path55",
+		"path58",
+	]
+	
+	backManePaths = [
+		"path8-8",
+		"path5",
+		"path50",
+		"path45",
+		"path91",
+		"path93",
+		"path68",
+	]
+	
+	backManeDarktonePaths = [
+		"path10-5",
+	]
+	
+	backManeOutlinePaths = [
+		"path9-6",
+		"path43",
+		"path49",
+		"path4",
+		"path90",
+		"path92",
+		"path90-4",
+	]
+	
 	if (alicornChance) {
 		alert("You found a rare alicorn! Make sure to preserve it for future studies.");
 	}
 
-	var paths = friend.querySelectorAll('[d]');
+	var paths = friend.contentDocument.querySelectorAll('[d]');
 
 	paths.forEach(function(path) {
-		var fillColor = path.getAttribute('fill');
+		if (bodyPaths.includes(path.id)) {
+			path.style.setProperty('fill', bodyColor, 'important');		
+		}		
+		
+		if (bodyDarkPaths.includes(path.id)) {
+			path.style.setProperty('fill', bodyColorBack, 'important');		
+		}	
+		
+		if (bodyOutlinePaths.includes(path.id)) {
+			path.style.setProperty('fill', bodyColorOutline, 'important');		
+		}	
+		
+		if (bodyOutlineDarkPaths.includes(path.id)) {
+			path.style.setProperty('fill', bodyColorBackOutline, 'important');		
+		}	
+		
+		if (frontManePaths.includes(path.id)) {
+			path.style.setProperty('fill', maneFrontColor, 'important');
+		}
+		
+		if (frontManeOutlinePaths.includes(path.id)){
+			path.style.setProperty('fill', maneFrontColorOutline, 'important');
+		}
+		
+		if (backManePaths.includes(path.id)) {
+			path.style.setProperty('fill', maneBackColor, 'important');
+		}
+		
+		if (backManeDarktonePaths.includes(path.id)) {
+			path.style.setProperty('fill', maneBackColorDarktone, 'important');
+		}
+
+		if (backManeOutlinePaths.includes(path.id)) {
+			path.style.setProperty('fill', maneBackColorOutline, 'important');
+		}
 		
 		if (scrunchChance) {
-			//console.log("scrunch");
 			if (smilePaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
+			
+			if (scrunchPaths.includes(path.id)) {
+				path.style.display = 'inline'; 
+			}
 		} else {
-			//console.log("noscrunch");
 			if (scrunchPaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
-		}
-		
-		if (puffyManeChance) {
-			//console.log("puffy");
-			if (pointyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		} else if (!puffyManeChance){
-			//console.log("not puffy");
-			if (puffyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
+			
+			if (smilePaths.includes(path.id)) {
+				path.style.display = 'inline'; 
 			}
 		}
 		
+
 		if (alicornChance) {
+			if (unicornPaths.includes(path.id)) {
+				path.style.display = 'inline'; 
+			}
+			
+			if (pegasusPaths.includes(path.id)) {
+				path.style.display = 'inline'; 
+			}
 		} else if (pegasusChance) {
 			if (pegasusPaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
+			
+			if (unicornPaths.includes(path.id)) {
+				path.style.display = 'inline'; 
+			}
 		} else if (unicornChance) {
 			if (unicornPaths.includes(path.id)) {
 				path.style.display = 'none'; 
+			}
+			
+			if (pegasusPaths.includes(path.id)) {
+				path.style.display = 'inline'; 
 			}
 		} else {
 			if (unicornPaths.includes(path.id) || pegasusPaths.includes(path.id)) {
@@ -528,57 +655,26 @@ function setColors() {
 			}
 		} 
 		
-		if (fillColor == "#b10000") {
-			path.style.setProperty('fill', bodyColor, 'important');
-		}
-		
-		if (!fillColor || fillColor == "#000000") {
-			path.style.setProperty('fill', bodyColorOutline, 'important');
-		}
-		
-		if (fillColor == "#010000") {
-			path.style.setProperty('fill', "#000000", 'important');
-		}
-		
-		if (fillColor == "#030202") {
-			path.style.setProperty('fill', "#000000", 'important');
-		}
-		
-		if (fillColor == "#ffffff") {
-			path.style.setProperty('fill', "#FFFFFF", 'important');
-		}
-		
-		if (fillColor == "#474747") {
-			path.style.setProperty('fill', bodyColorBackOutline, 'important');
-		}
-		
-		if (fillColor == "#800000") {
-			path.style.setProperty('fill', bodyColorBack, 'important');
-		}
-		
-		if (fillColor == "#ff00f1") {
-			path.style.setProperty('fill', maneBackColor, 'important');
-		}
-		
-		if (fillColor == "#94008c") {
-			path.style.setProperty('fill', maneBackColorDarktone, 'important');
-		}
-		
-		if (fillColor == "#3dff00") {
-			path.style.setProperty('fill', maneFrontColor, 'important');
-		}
-		
-		if (fillColor == "#ff0000") {
-			path.style.setProperty('fill', maneBackColorOutline, 'important');
-		}
-		
-		if (fillColor == "#0000ff") {
-			path.style.setProperty('fill', maneFrontColorOutline, 'important');
-		}
+		if (puffyManeChance) {
+			if (pointyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
 
+			if (puffyManePaths.includes(path.id)) {
+				path.style.display = 'inline'; 
+			}
+		} else if (!puffyManeChance){
+			if (puffyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+			if (pointyManePaths.includes(path.id)) {
+				path.style.display = 'inline'; 
+			}
+		}
+		
 	});
 	
-	var gradients = friend.querySelectorAll('linearGradient');
+	var gradients = friend.contentDocument.querySelectorAll('linearGradient');
 
 	gradients.forEach(function(gradient) {
 		var stops = gradient.querySelectorAll('stop');
@@ -633,7 +729,6 @@ function giveFriend() {
 		friend.addEventListener('animationend', function() {
 			friend.classList.remove('zoomingOut', 'rot8out');
 			friendReady = false;
-			friend.innerHTML = "";
 			giveFriend();
 		}, { once: true });
 	}
