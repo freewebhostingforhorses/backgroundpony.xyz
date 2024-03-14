@@ -13,7 +13,7 @@
 		background-color: efefef;
 		text-align: center;
 	}
-	
+		
 	#gimme {
 		padding: 1rem 3rem 1rem 3rem;
 		font-size: 1.5rem;
@@ -237,8 +237,6 @@
 //https://github.com/davidbau/seedrandom
 !function(f,a,c){var s,l=256,p="random",d=c.pow(l,6),g=c.pow(2,52),y=2*g,h=l-1;function n(n,t,r){function e(){for(var n=u.g(6),t=d,r=0;n<g;)n=(n+r)*l,t*=l,r=u.g(1);for(;y<=n;)n/=2,t/=2,r>>>=1;return(n+r)/t}var o=[],i=j(function n(t,r){var e,o=[],i=typeof t;if(r&&"object"==i)for(e in t)try{o.push(n(t[e],r-1))}catch(n){}return o.length?o:"string"==i?t:t+"\0"}((t=1==t?{entropy:!0}:t||{}).entropy?[n,S(a)]:null==n?function(){try{var n;return s&&(n=s.randomBytes)?n=n(l):(n=new Uint8Array(l),(f.crypto||f.msCrypto).getRandomValues(n)),S(n)}catch(n){var t=f.navigator,r=t&&t.plugins;return[+new Date,f,r,f.screen,S(a)]}}():n,3),o),u=new m(o);return e.int32=function(){return 0|u.g(4)},e.quick=function(){return u.g(4)/4294967296},e.double=e,j(S(u.S),a),(t.pass||r||function(n,t,r,e){return e&&(e.S&&v(e,u),n.state=function(){return v(u,{})}),r?(c[p]=n,t):n})(e,i,"global"in t?t.global:this==c,t.state)}function m(n){var t,r=n.length,u=this,e=0,o=u.i=u.j=0,i=u.S=[];for(r||(n=[r++]);e<l;)i[e]=e++;for(e=0;e<l;e++)i[e]=i[o=h&o+n[e%r]+(t=i[e])],i[o]=t;(u.g=function(n){for(var t,r=0,e=u.i,o=u.j,i=u.S;n--;)t=i[e=h&e+1],r=r*l+i[h&(i[e]=i[o=h&o+t])+(i[o]=t)];return u.i=e,u.j=o,r})(l)}function v(n,t){return t.i=n.i,t.j=n.j,t.S=n.S.slice(),t}function j(n,t){for(var r,e=n+"",o=0;o<e.length;)t[h&o]=h&(r^=19*t[h&o])+e.charCodeAt(o++);return S(t)}function S(n){return String.fromCharCode.apply(0,n)}if(j(c.random(),a),"object"==typeof module&&module.exports){module.exports=n;try{s=require("crypto")}catch(n){}}else"function"==typeof define&&define.amd?define(function(){return n}):c["seed"+p]=n}("undefined"!=typeof self?self:this,[],Math);
 
-
-
 var gimme = document.getElementById('gimme');
 var save = document.getElementById('save');
 var seedtxt = document.getElementById('seedtxt');
@@ -249,8 +247,14 @@ var friendReady = false;
 seedtxt.disabled = true;
 save.disabled = true;
 
+function isMobileDevice() {
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 function loadSVG() {
     fetch('./real.svg').then(response => response.text()).then(svgData => {
+        svgData = svgData.replace(/width="[\d\.]+"/g, 'width="450"');
+        svgData = svgData.replace(/height="[\d\.]+"/g, 'height="450"');
         friend.innerHTML = svgData;
         prepareColors();
         setColors();
@@ -277,6 +281,8 @@ seedtxt.addEventListener('input', function() {
 	loadSVG();
 });
 
+
+
 gimme.addEventListener('click', () => {
 	seedcontainer.style.display = "block";
     gimme.innerHTML = "Give me another.";
@@ -286,7 +292,8 @@ gimme.addEventListener('click', () => {
 
 function sendSVGToCanvas() {
     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
-    svgString = svgString.replace('<svg width="450" height="450"', '<svg width="720" height="720"');
+    svgString = svgString.replace(/width="[\d\.]+"/g, 'width="720"');
+    svgString = svgString.replace(/height="[\d\.]+"/g, 'height="720"');
 	var img = new Image();
     img.src = 'data:image/svg+xml;base64,' + btoa(svgString);
     var canvas = document.getElementById('canvas');
@@ -310,7 +317,7 @@ function sendSVGToCanvas() {
         ctx.strokeText(text, x, y);
         ctx.fillText(text, x, y); 
 		
-		if (/iPhone|iPad|iPod/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent) || /Firefox/i.test(navigator.userAgent)) { 
+		if (isMobileDevice() || /Firefox/i.test(navigator.userAgent)) { 
 			var link = document.createElement('a');
 			link.download = seed + '.png';
 			canvas.toBlob(function(blob) {
@@ -366,7 +373,9 @@ function prepareColors() {
 	eyeColor = randomHexColorCode(seed)
 
 	maneBackColor = randomHexColorCode(seed + Math.random())
+	maneBackColorDarktone 	= LightenDarkenColor(maneBackColor, -15)
 	maneBackColorOutline     = LightenDarkenColor(maneBackColor, -35)
+	
 	maneFrontColor = randomHexColorCode(seed + Math.random())
 	maneFrontColorOutline     = LightenDarkenColor(maneFrontColor, -35)
 
@@ -393,23 +402,35 @@ function setColors() {
 	randomScrunch = Math.random();
 	scrunchChance = randomScrunch < 0.01;
 
+	randomPuffyMane = Math.random();
+	puffyManeChance = randomPuffyMane < 0.20;
+
+
 	//console.log("Random Scrunch:", randomScrunch);
 	//console.log("Random Alicorn:", randomAlicorn);
 	//console.log("Random Unicorn:", randomUnicorn);
 	//console.log("Random Pegasus:", randomPegasus);
+	//console.log("Random puffymane:", randomPuffyMane);
+
 	
 	unicornPaths = [
-		"path51",
-		"path52",
+		//for puffy
+		"path54",
 		"path53",
-		"path54"
+		"path52",
+		"path51",
+		
+		//default, under mane
+		"path51-8",
+		"path52-0",
+		"path53-2",
+		"path54-0"
 	]
 	
 	pegasusPaths = [
 		"path16",
 		"path17",
-		"path20",
-		"path21"
+		"path20"
 	]
 	
 	smilePaths = [
@@ -422,6 +443,41 @@ function setColors() {
 		"path63",
 		"path64",
 		"path65"
+	]
+	
+	puffyManePaths = [
+		"path92",
+		"path93",
+		"path90",
+		"path91",
+		"path68",
+		"path90-4",
+		"path9-6",
+		"path10-5",
+		"path8-8",
+		"path54",
+		"path53",
+		"path52",
+		"path51"
+	]
+	
+	pointyManePaths = [
+		"path59",
+		"path58",
+		"path56",
+		"path55",
+		"path50",
+		"path49",
+		"path45",
+		"path43",
+		"path4",
+		"path5",
+		"path6",
+		"path7",
+		"path51-8",
+		"path52-0",
+		"path53-2",
+		"path54-0"
 	]
 	
 	if (alicornChance) {
@@ -445,6 +501,18 @@ function setColors() {
 			}
 		}
 		
+		if (puffyManeChance) {
+			//console.log("puffy");
+			if (pointyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+		} else if (!puffyManeChance){
+			//console.log("not puffy");
+			if (puffyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+		}
+		
 		if (alicornChance) {
 		} else if (pegasusChance) {
 			if (pegasusPaths.includes(path.id)) {
@@ -463,43 +531,47 @@ function setColors() {
 		if (fillColor == "#b10000") {
 			path.style.setProperty('fill', bodyColor, 'important');
 		}
-
+		
 		if (!fillColor || fillColor == "#000000") {
 			path.style.setProperty('fill', bodyColorOutline, 'important');
 		}
-
+		
 		if (fillColor == "#010000") {
 			path.style.setProperty('fill', "#000000", 'important');
 		}
-
+		
 		if (fillColor == "#030202") {
 			path.style.setProperty('fill', "#000000", 'important');
 		}
-
+		
 		if (fillColor == "#ffffff") {
 			path.style.setProperty('fill', "#FFFFFF", 'important');
 		}
-
+		
 		if (fillColor == "#474747") {
 			path.style.setProperty('fill', bodyColorBackOutline, 'important');
 		}
-
+		
 		if (fillColor == "#800000") {
 			path.style.setProperty('fill', bodyColorBack, 'important');
 		}
-
+		
 		if (fillColor == "#ff00f1") {
 			path.style.setProperty('fill', maneBackColor, 'important');
 		}
-
+		
+		if (fillColor == "#94008c") {
+			path.style.setProperty('fill', maneBackColorDarktone, 'important');
+		}
+		
 		if (fillColor == "#3dff00") {
 			path.style.setProperty('fill', maneFrontColor, 'important');
 		}
-
+		
 		if (fillColor == "#ff0000") {
 			path.style.setProperty('fill', maneBackColorOutline, 'important');
 		}
-
+		
 		if (fillColor == "#0000ff") {
 			path.style.setProperty('fill', maneFrontColorOutline, 'important');
 		}
