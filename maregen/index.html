@@ -389,31 +389,7 @@ runs = 0;
 
 function setColors() {
 
-
-	randomAlicorn = Math.random();
-	alicornChance = randomAlicorn < 0.0052;
-
-	randomUnicorn = Math.random();
-	unicornChance = (!alicornChance) && (randomUnicorn < 0.33); 
-
-	randomPegasus = Math.random();
-	pegasusChance = (!alicornChance) && (!unicornChance) && (randomPegasus < 0.33);
-
-	randomScrunch = Math.random();
-	scrunchChance = randomScrunch < 0.01;
-
-	randomPuffyMane = Math.random();
-	puffyManeChance = randomPuffyMane < 0.20;
-
-
-	//console.log("Random Scrunch:", randomScrunch);
-	//console.log("Random Alicorn:", randomAlicorn);
-	//console.log("Random Unicorn:", randomUnicorn);
-	//console.log("Random Pegasus:", randomPegasus);
-	//console.log("Random puffymane:", randomPuffyMane);
-
-	
-	unicornPaths = [
+unicornPaths = [
 		//for puffy
 		"path54",
 		"path53",
@@ -424,7 +400,14 @@ function setColors() {
 		"path51-8",
 		"path52-0",
 		"path53-2",
-		"path54-0"
+		"path54-0",
+		
+		"path121",
+		"path120",
+		"path119",
+		"path118",
+		"path117",
+		"path116",
 	]
 	
 	pegasusPaths = [
@@ -461,6 +444,30 @@ function setColors() {
 		"path51"
 	]
 	
+	poofyManePaths = [
+		"path121",
+		"path116",
+		"path93-1",
+		"path92-4",
+		"path82",
+		"path83",
+		"path80",
+		"path81",
+		"path22-3",
+		"path21-7",
+		"path20-4",
+		"path115",
+		"path113",
+		"path112",
+		"path111",
+		"path121",
+		"path120",
+		"path119",
+		"path118",
+		"path117",
+		"path116",
+	]
+	
 	pointyManePaths = [
 		"path59",
 		"path58",
@@ -479,6 +486,39 @@ function setColors() {
 		"path53-2",
 		"path54-0"
 	]
+
+	randomAlicorn = Math.random();
+	alicornChance = randomAlicorn < 0.0052;
+
+	randomUnicorn = Math.random();
+	unicornChance = (!alicornChance) && (randomUnicorn < 0.33); 
+
+	randomPegasus = Math.random();
+	pegasusChance = (!alicornChance) && (!unicornChance) && (randomPegasus < 0.33);
+
+	randomScrunch = Math.random();
+	scrunchChance = randomScrunch < 0.01;
+
+	randomPointyMane = Math.random();
+	pointyManeChance = randomPointyMane < 0.33;
+
+	randomPuffyMane = Math.random();
+	puffyManeChance = (!pointyManeChance) && randomPuffyMane < 0.33;
+
+	randomPoofyMane = Math.random();
+	poofyManeChance = (!pointyManeChance) && (!puffyManeChance) && (randomPoofyMane < 0.33);
+
+
+	console.log("Random Scrunch:", randomScrunch);
+	console.log("Random Alicorn:", randomAlicorn);
+	console.log("Random Unicorn:", randomUnicorn);
+	console.log("Random Pegasus:", randomPegasus);
+	console.log("Random pointymane:", randomPointyMane);
+	console.log("Random puffymane:", randomPuffyMane);
+	console.log("Random poofymane:", randomPoofyMane);
+
+	
+	
 	
 	if (alicornChance) {
 		alert("You found a rare alicorn! Make sure to preserve it for future studies.");
@@ -490,24 +530,38 @@ function setColors() {
 		var fillColor = path.getAttribute('fill');
 		
 		if (scrunchChance) {
-			//console.log("scrunch");
 			if (smilePaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
 		} else {
-			//console.log("noscrunch");
 			if (scrunchPaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
 		}
 		
-		if (puffyManeChance) {
-			//console.log("puffy");
+		if (pointyManeChance) {
+			if (puffyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+			
+			if (poofyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+		} else if (!pointyManeChance){
 			if (pointyManePaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
+		}
+		
+		if (puffyManeChance) {
+			if (pointyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
+			
+			if (poofyManePaths.includes(path.id)) {
+				path.style.display = 'none'; 
+			}
 		} else if (!puffyManeChance){
-			//console.log("not puffy");
 			if (puffyManePaths.includes(path.id)) {
 				path.style.display = 'none'; 
 			}
