@@ -733,7 +733,7 @@ function generateEmojiBoard() {
 
   let seed = board.join("").split(",").join("");
 
-  let copyVal = `Words: ${usedWords.length}\nScore: ${score}\n${boardEmojified}\n\nhttps://horsegamesforhorsepeople.github.io/horsegame/index.html?seed=${seed}`;
+  let copyVal = `Words: ${usedWords.length}\nScore: ${score}\n${boardEmojified}\n\nbackgroundpony.xyz/horsegame?seed=${seed}`;
 
   navigator.clipboard.writeText(copyVal);
 }
