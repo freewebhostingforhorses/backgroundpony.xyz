@@ -397,6 +397,11 @@ runs = 0;
 
 function positionPathBefore(path, target) {
 	var src = document.getElementById(path);
+
+	if (!src) {
+		alert("If you're seeing this message, you probably need to clear your browser cache");
+	}
+	
 	var destination = document.getElementById(target);
 
 	src.parentNode.removeChild(src);
