@@ -244,6 +244,7 @@ var friend = document.getElementById('yournewbestfriend');
 var friendcontainer = document.getElementById('friendcontainer');
 var seedcontainer = document.getElementById('seedcontainer');
 var friendReady = false;
+var friendLoaded = false;
 seedtxt.disabled = true;
 save.disabled = true;
 
@@ -252,13 +253,19 @@ function isMobileDevice() {
 }
 
 function loadSVG() {
-    fetch('./real.svg').then(response => response.text()).then(svgData => {
-        svgData = svgData.replace(/width="[\d\.]+"/g, 'width="450"');
-        svgData = svgData.replace(/height="[\d\.]+"/g, 'height="450"');
-        friend.innerHTML = svgData;
+	if (friendLoaded == false) {
+		fetch('./real.svg').then(response => response.text()).then(svgData => {
+			svgData = svgData.replace(/width="[\d\.]+"/g, 'width="450"');
+			svgData = svgData.replace(/height="[\d\.]+"/g, 'height="450"');
+			friend.innerHTML = svgData;
+			prepareColors();
+			setColors();
+			friendLoaded = true;
+		});
+	} else if (friendLoaded == true) {
         prepareColors();
         setColors();
-    });
+	}
 }
 
 var letterCounter = 0;
@@ -387,106 +394,171 @@ function prepareColors() {
 
 runs = 0;
 
+function positionPathBefore(path, target) {
+	var src = document.getElementById(path);
+	var destination = document.getElementById(target);
+
+	src.parentNode.removeChild(src);
+	destination.parentNode.insertBefore(src, destination);
+}
+
 function setColors() {
 
-unicornPaths = [
-		//for puffy
-		"path54",
-		"path53",
-		"path52",
-		"path51",
-		
-		//default, under mane
-		"path51-8",
-		"path52-0",
-		"path53-2",
-		"path54-0",
-		
-		"path121",
-		"path120",
-		"path119",
-		"path118",
-		"path117",
-		"path116",
+	unicornPaths = [
+		"horn-patch-outline",
+		"horn-patch-fill",
+		"horn-outline",
+		"horn-fill",
 	]
 	
 	pegasusPaths = [
-		"path16",
-		"path17",
-		"path20"
+		"wing-fill",
+		"wing-outline",
+		"wing-base-fill"
 	]
 	
-	smilePaths = [
-		"path40",
-		"path41",
-		"path42"
+	allManePaths = [
+		"mane1-tail-upper-outline",
+		"mane1-tail-upper-fill",
+		"mane1-tail-lower-outline",
+		"mane1-tail-lower-fill",
+		"mane1-upper-outline",
+		"mane1-upper-fill",
+		"mane1-lower-outline",
+		"mane1-lower-fill",
+		"mane1-upper-side-fill",
+		"mane1-upper-side-outline",
+		"mane1-lower-side-outline",
+		"mane1-lower-side-fill",
+		"mane1-upper-end-side-outline",
+		"mane1-upper-end-side-fill",
+		
+		"mane2-tail-outline",
+		"mane2-tail-fill",
+		"mane2-side-outline",
+		"mane2-side-fill",
+		"mane2-outline",
+		"mane2-fill",
+		
+		"mane3-upper-outline",
+		"mane3-upper-fill",		
+		"mane3-lower-outline",	
+		"mane3-lower-fill",
+		"mane3-side-upper-outline",	
+		"mane3-side-upper-fill",	
+		"mane3-side-lower-outline",
+		"mane3-side-lower-fill",
+		"mane3-tail-upper-outline",
+		"mane3-tail-upper-fill",
+		"mane3-tail-lower-outline",
+		"mane3-tail-lower-fill",
+		
+		"mane4-outline",
+		"mane4-fill",
+		"mane4-side-outline",		
+		"mane4-side-fill",		
+		"mane4-tail-outline", 
+		"mane4-tail-fill",
+		"mane4-horn-patch-outline",
+		"mane4-horn-patch-fill",
+		
+		"mane5-tail-fill",
+		"mane5-tail-outline",
+		"mane5-side-fill",
+		"mane5-side-outline",
+		"mane5-fill",
+		"mane5-outline",
+		"mane5-fill-loose",
+		"mane5-outline-loose",
 	]
 	
-	scrunchPaths = [
-		"path63",
-		"path64",
-		"path65"
+	pointyMane1Paths = [
+		"mane3-upper-outline",
+		"mane3-upper-fill",		
+		"mane3-lower-outline",	
+		"mane3-lower-fill",
+		"mane3-side-upper-outline",
+		"mane3-side-upper-fill",	
+		"mane3-side-lower-outline",
+		"mane3-side-lower-fill",	
+		"mane3-tail-upper-outline",
+		"mane3-tail-upper-fill",
+		"mane3-tail-lower-outline",
+		"mane3-tail-lower-fill",
 	]
 	
-	puffyManePaths = [
-		"path92",
-		"path93",
-		"path90",
-		"path91",
-		"path68",
-		"path90-4",
-		"path9-6",
-		"path10-5",
-		"path8-8",
-		"path54",
-		"path53",
-		"path52",
-		"path51"
+	pointyMane2Paths = [
+		"mane1-tail-upper-outline",
+		"mane1-tail-upper-fill",
+		"mane1-tail-lower-outline",
+		"mane1-tail-lower-fill",
+		"mane1-upper-outline",
+		"mane1-upper-fill",
+		"mane1-lower-outline",
+		"mane1-lower-fill",
+		"mane1-upper-side-fill",
+		"mane1-upper-side-outline",
+		"mane1-lower-side-outline",
+		"mane1-lower-side-fill",
+		"mane1-upper-end-side-outline",
+		"mane1-upper-end-side-fill",
 	]
 	
-	poofyManePaths = [
-		"path121",
-		"path116",
-		"path93-1",
-		"path92-4",
-		"path82",
-		"path83",
-		"path80",
-		"path81",
-		"path22-3",
-		"path21-7",
-		"path20-4",
-		"path115",
-		"path113",
-		"path112",
-		"path111",
-		"path121",
-		"path120",
-		"path119",
-		"path118",
-		"path117",
-		"path116",
+	doodlyMane1Paths = [
+		"mane2-tail-outline",
+		"mane2-tail-fill",
+		"mane2-side-outline",
+		"mane2-side-fill",
+		"mane2-outline",
+		"mane2-fill",
 	]
 	
-	pointyManePaths = [
-		"path59",
-		"path58",
-		"path56",
-		"path55",
-		"path50",
-		"path49",
-		"path45",
-		"path43",
-		"path4",
-		"path5",
-		"path6",
-		"path7",
-		"path51-8",
-		"path52-0",
-		"path53-2",
-		"path54-0"
+	poofyMane1Paths = [
+		"mane4-outline",
+		"mane4-fill",
+		"mane4-side-outline",		
+		"mane4-side-fill",		
+		"mane4-tail-outline", 
+		"mane4-tail-fill",
+		"mane4-horn-patch-outline",
+		"mane4-horn-patch-fill",
 	]
-
+	
+	poofyMane2Paths = [
+		"mane5-tail-fill",
+		"mane5-tail-outline",
+		"mane5-side-fill",
+		"mane5-side-outline",
+		"mane5-fill",
+		"mane5-outline",
+		"mane5-fill-loose",
+		"mane5-outline-loose",
+	]
+	
+	eyeStops = [
+		"stop27",
+		"stop24",
+	]
+	
+	muzzles = [
+		"muzzle-smile-fill",
+		"muzzle-smile-mouth",
+		"muzzle-smile-outline",
+		"muzzle-scrunch-fill",
+		"muzzle-scrunch-outline",
+	]
+	
+	muzzleScrunch = [
+		"muzzle-scrunch-fill",
+		"muzzle-scrunch-outline",
+	]
+	
+	muzzleSmile = [
+		"muzzle-smile-fill",
+		"muzzle-smile-mouth",
+		"muzzle-smile-outline",
+	]
+	
 	randomAlicorn = Math.random();
 	alicornChance = randomAlicorn < 0.0052;
 
@@ -500,26 +572,30 @@ unicornPaths = [
 	scrunchChance = randomScrunch < 0.01;
 
 	randomPointyMane = Math.random();
-	pointyManeChance = randomPointyMane < 0.33;
+	pointyManeChance = randomPointyMane < 0.20;
 
-	randomPuffyMane = Math.random();
-	puffyManeChance = (!pointyManeChance) && randomPuffyMane < 0.33;
+	randomPointyMane2 = Math.random();
+	pointyMane2Chance = (!pointyManeChance) && randomPointyMane2 < 0.20;
+
+	randomDoodlyMane = Math.random();
+	doodlyManeChance = (!pointyManeChance) && (!pointyMane2Chance) && randomDoodlyMane < 0.20;
 
 	randomPoofyMane = Math.random();
-	poofyManeChance = (!pointyManeChance) && (!puffyManeChance) && (randomPoofyMane < 0.33);
+	poofyManeChance = (!doodlyManeChance) && (!pointyManeChance) && (!doodlyManeChance) && (randomPoofyMane < 0.20);
+
+	randomAlcoholicMane = Math.random();
+	alcoholicManeChance = (!poofyManeChance) && (!doodlyManeChance) && (!pointyMane2Chance) && (!pointyManeChance) && (randomAlcoholicMane < 0.20);
 
 
-	console.log("Random Scrunch:", randomScrunch);
-	console.log("Random Alicorn:", randomAlicorn);
-	console.log("Random Unicorn:", randomUnicorn);
-	console.log("Random Pegasus:", randomPegasus);
-	console.log("Random pointymane:", randomPointyMane);
-	console.log("Random puffymane:", randomPuffyMane);
-	console.log("Random poofymane:", randomPoofyMane);
+	//console.log("Random Scrunch:", randomScrunch);
+	//console.log("Random Alicorn:", randomAlicorn);
+	//console.log("Random Unicorn:", randomUnicorn);
+	//console.log("Random Pegasus:", randomPegasus);
+	//console.log("Random pointyMane:", randomPointyMane);
+	//console.log("Random pointyMane2:", randomPointyMane2);
+	//console.log("Random doodlyMane:", randomDoodlyMane);
+	//console.log("Random poofyMane:", randomPoofyMane);
 
-	
-	
-	
 	if (alicornChance) {
 		alert("You found a rare alicorn! Make sure to preserve it for future studies.");
 	}
@@ -528,61 +604,13 @@ unicornPaths = [
 
 	paths.forEach(function(path) {
 		var fillColor = path.getAttribute('fill');
-		
-		if (scrunchChance) {
-			if (smilePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		} else {
-			if (scrunchPaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
+
+		// Disable most features at onse, then you can put the one you want back on later judging by its type.
+		if (allManePaths.includes(path.id) || pegasusPaths.includes(path.id) || unicornPaths.includes(path.id) || muzzles.includes(path.id)) {
+			path.style.display = 'none'; 
 		}
 		
-		if (pointyManeChance) {
-			if (puffyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-			
-			if (poofyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		} else if (!pointyManeChance){
-			if (pointyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		}
-		
-		if (puffyManeChance) {
-			if (pointyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-			
-			if (poofyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		} else if (!puffyManeChance){
-			if (puffyManePaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		}
-		
-		if (alicornChance) {
-		} else if (pegasusChance) {
-			if (pegasusPaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		} else if (unicornChance) {
-			if (unicornPaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		} else {
-			if (unicornPaths.includes(path.id) || pegasusPaths.includes(path.id)) {
-				path.style.display = 'none'; 
-			}
-		} 
-		
-		if (fillColor == "#b10000") {
+		if (fillColor == "#ff0000") {
 			path.style.setProperty('fill', bodyColor, 'important');
 		}
 		
@@ -590,27 +618,14 @@ unicornPaths = [
 			path.style.setProperty('fill', bodyColorOutline, 'important');
 		}
 		
-		if (fillColor == "#010000") {
-			path.style.setProperty('fill', "#000000", 'important');
-		}
-		
-		if (fillColor == "#030202") {
-			path.style.setProperty('fill', "#000000", 'important');
-		}
-		
-		if (fillColor == "#ffffff") {
-			path.style.setProperty('fill', "#FFFFFF", 'important');
-		}
-		
-		if (fillColor == "#474747") {
+		if (fillColor == "#494949") {
 			path.style.setProperty('fill', bodyColorBackOutline, 'important');
 		}
-		
-		if (fillColor == "#800000") {
+		if (fillColor == "#b10000") {
 			path.style.setProperty('fill', bodyColorBack, 'important');
 		}
 		
-		if (fillColor == "#ff00f1") {
+		if (fillColor == "#00ffff") {
 			path.style.setProperty('fill', maneBackColor, 'important');
 		}
 		
@@ -621,23 +636,78 @@ unicornPaths = [
 		if (fillColor == "#3dff00") {
 			path.style.setProperty('fill', maneFrontColor, 'important');
 		}
-		
-		if (fillColor == "#ff0000") {
+
+ 		if (fillColor == "#0c0090") {
 			path.style.setProperty('fill', maneBackColorOutline, 'important');
 		}
-		
+
 		if (fillColor == "#0000ff") {
 			path.style.setProperty('fill', maneFrontColorOutline, 'important');
 		}
 
+		if (scrunchChance) {
+			if (muzzleScrunch.includes(path.id)) 
+				path.style.display = 'block'; 
+		} else {
+			if (muzzleSmile.includes(path.id)) 
+				path.style.display = 'block'; 
+		} 
+
+		if (alicornChance) {
+			if (unicornPaths.includes(path.id)) 
+				path.style.display = 'block'; 
+			if (pegasusPaths.includes(path.id)) 
+				path.style.display = 'block'; 
+		} else if (unicornChance) {
+			if (pegasusPaths.includes(path.id)) 
+				path.style.display = 'block'; 
+		} else if (pegasusChance) {
+			if (unicornPaths.includes(path.id)) 
+				path.style.display = 'block'; 
+		}
+
+
+		if (doodlyManeChance) {
+			if (doodlyMane1Paths.includes(path.id)) 
+				path.style.display = 'block'; 
+			
+			if (path.id == "horn-patch-fill")
+				path.style.display = 'none'; 
+		} else if (pointyMane2Chance) {
+			if (pointyMane2Paths.includes(path.id)) 
+				path.style.display = 'block';
+		} else if (poofyManeChance) {
+			if (poofyMane1Paths.includes(path.id)) 
+				path.style.display = 'block';
+			
+			positionPathBefore("horn-fill",    "mane4-horn-patch-fill")
+			positionPathBefore("horn-outline", "mane4-horn-patch-fill")
+		} else if (alcoholicManeChance) {
+			if (poofyMane2Paths.includes(path.id)) 
+				path.style.display = 'block';
+				
+			positionPathBefore("horn-fill", "horn-patch-fill")
+			positionPathBefore("horn-outline", "horn-patch-outline")
+		} else {
+			if (pointyMane1Paths.includes(path.id)) 
+				path.style.display = 'block'; 
+			if (path.id == "horn-patch-fill")
+				path.style.display = 'none'; 
+			if (path.id == "horn-patch-outline")
+				path.style.display = 'none'; 
+
+			positionPathBefore("horn-fill", "mane3-lower-outline")
+			positionPathBefore("horn-outline", "mane3-lower-outline")
+		}
 	});
+	
 	
 	var gradients = friend.querySelectorAll('linearGradient');
 
 	gradients.forEach(function(gradient) {
 		var stops = gradient.querySelectorAll('stop');
 		stops.forEach(function(stop) {
-			if (stop.getAttribute('stop-color') == 'red') {
+			if (eyeStops.includes(stop.id)) {
 				stop.setAttribute('stop-color', eyeColor);
 			}
 		});
@@ -687,7 +757,6 @@ function giveFriend() {
 		friend.addEventListener('animationend', function() {
 			friend.classList.remove('zoomingOut', 'rot8out');
 			friendReady = false;
-			friend.innerHTML = "";
 			giveFriend();
 		}, { once: true });
 	}
