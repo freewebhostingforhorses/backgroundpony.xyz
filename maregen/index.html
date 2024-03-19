@@ -258,9 +258,10 @@ function loadSVG() {
 			svgData = svgData.replace(/width="[\d\.]+"/g, 'width="450"');
 			svgData = svgData.replace(/height="[\d\.]+"/g, 'height="450"');
 			friend.innerHTML = svgData;
+			friendLoaded = true;
 			prepareColors();
 			setColors();
-			friendLoaded = true;
+			
 		});
 	} else if (friendLoaded == true) {
         prepareColors();
