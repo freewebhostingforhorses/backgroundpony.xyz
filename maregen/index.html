@@ -397,11 +397,6 @@ runs = 0;
 
 function positionPathBefore(path, target) {
 	var src = document.getElementById(path);
-
-	if (!src) {
-		alert("If you're seeing this message, you probably need to clear your browser cache");
-	}
-	
 	var destination = document.getElementById(target);
 
 	src.parentNode.removeChild(src);
@@ -622,6 +617,10 @@ function setColors() {
 		
 		if (!fillColor || fillColor == "#000000") {
 			path.style.setProperty('fill', bodyColorOutline, 'important');
+		}
+		
+		if (fillColor == "#000006") {
+			path.style.setProperty('fill', 'black', 'important');
 		}
 		
 		if (fillColor == "#494949") {
