@@ -123,6 +123,7 @@ var REMOTE_PACKAGE_SIZE = metadata['remote_package_size'];
         if (!check) throw msg + new Error().stack;
       }
 Module['FS_createPath']("/", "data", true, true);
+Module['FS_createPath']("/data", "levels", true, true);
 
       /** @constructor */
       function DataRequest(start, end, audio) {
@@ -190,7 +191,7 @@ Module['FS_createPath']("/", "data", true, true);
     }
 
     }
-    loadPackage({"files": [{"filename": "/data/char.png", "start": 0, "end": 1832}, {"filename": "/data/default.gif", "start": 1832, "end": 4606}, {"filename": "/data/dirt.png", "start": 4606, "end": 5617}, {"filename": "/data/grass.png", "start": 5617, "end": 6810}, {"filename": "/data/levels.txt", "start": 6810, "end": 6820}, {"filename": "/data/rock.png", "start": 6820, "end": 7281}, {"filename": "/data/terrain.png", "start": 7281, "end": 12881}, {"filename": "/data/water.png", "start": 12881, "end": 13187}], "remote_package_size": 13187});
+    loadPackage({"files": [{"filename": "/data/char.png", "start": 0, "end": 1832}, {"filename": "/data/clouds.png", "start": 1832, "end": 11707}, {"filename": "/data/default.gif", "start": 11707, "end": 14481}, {"filename": "/data/dirt.png", "start": 14481, "end": 15492}, {"filename": "/data/grass.png", "start": 15492, "end": 16685}, {"filename": "/data/levels/levels.txt", "start": 16685, "end": 16695}, {"filename": "/data/rock.png", "start": 16695, "end": 17752}, {"filename": "/data/tallterrain.png", "start": 17752, "end": 22594}, {"filename": "/data/terrain.png", "start": 22594, "end": 32712}, {"filename": "/data/water.png", "start": 32712, "end": 33018}], "remote_package_size": 33018});
 
   })();
 
@@ -1176,6 +1177,14 @@ function dbg(text) {
 // end include: runtime_debug.js
 // === Body ===
 
+var ASM_CONSTS = {
+  1148680: () => { document.exitPointerLock(); },  
+ 1148712: () => { document.activeElement.blur(); },  
+ 1148747: () => { document.exitPointerLock(); },  
+ 1148779: () => { document.activeElement.blur(); }
+};
+
+
 // end include: preamble.js
 
   /** @constructor */
@@ -1798,6 +1807,7 @@ function dbg(text) {
         },
   put_char(tty, val) {
           if (val === null || val === 10) {
+            out(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
           } else {
             if (val != 0) tty.output.push(val); // val == 0 would cut text output off in the middle.
@@ -4353,6 +4363,45 @@ function dbg(text) {
 
   var _abort = () => {
       abort('native code called abort()');
+    };
+
+  var readEmAsmArgsArray = [];
+  var readEmAsmArgs = (sigPtr, buf) => {
+      // Nobody should have mutated _readEmAsmArgsArray underneath us to be something else than an array.
+      assert(Array.isArray(readEmAsmArgsArray));
+      // The input buffer is allocated on the stack, so it must be stack-aligned.
+      assert(buf % 16 == 0);
+      readEmAsmArgsArray.length = 0;
+      var ch;
+      // Most arguments are i32s, so shift the buffer pointer so it is a plain
+      // index into HEAP32.
+      while (ch = HEAPU8[sigPtr++]) {
+        var chr = String.fromCharCode(ch);
+        var validChars = ['d', 'f', 'i', 'p'];
+        assert(validChars.includes(chr), `Invalid character ${ch}("${chr}") in readEmAsmArgs! Use only [${validChars}], and do not specify "v" for void return argument.`);
+        // Floats are always passed as doubles, so all types except for 'i'
+        // are 8 bytes and require alignment.
+        var wide = (ch != 105);
+        wide &= (ch != 112);
+        buf += wide && (buf % 8) ? 4 : 0;
+        readEmAsmArgsArray.push(
+          // Special case for pointers under wasm64 or CAN_ADDRESS_2GB mode.
+          ch == 112 ? HEAPU32[((buf)>>2)] :
+          ch == 105 ?
+            HEAP32[((buf)>>2)] :
+            HEAPF64[((buf)>>3)]
+        );
+        buf += wide ? 8 : 4;
+      }
+      return readEmAsmArgsArray;
+    };
+  var runEmAsmFunction = (code, sigPtr, argbuf) => {
+      var args = readEmAsmArgs(sigPtr, argbuf);
+      assert(ASM_CONSTS.hasOwnProperty(code), `No EM_ASM constant found at address ${code}.  The loaded WebAssembly file is likely out of sync with the generated JavaScript.`);
+      return ASM_CONSTS[code].apply(null, args);
+    };
+  var _emscripten_asm_const_int = (code, sigPtr, argbuf) => {
+      return runEmAsmFunction(code, sigPtr, argbuf);
     };
 
   var _emscripten_date_now = () => Date.now();
@@ -7444,6 +7493,7 @@ function dbg(text) {
       Browser.mainLoop.timingValue = value;
   
       if (!Browser.mainLoop.func) {
+        err('emscripten_set_main_loop_timing: Cannot set timing mode for main loop since a main loop does not exist! Call emscripten_set_main_loop first to set one up.');
         return 1; // Return non-zero on failure, can't set timing mode when there is no main loop.
       }
   
@@ -9003,6 +9053,8 @@ function dbg(text) {
 
   var _glfwSetKeyCallback = (winid, cbfun) => GLFW.setKeyCallback(winid, cbfun);
 
+  var _glfwSetScrollCallback = (winid, cbfun) => GLFW.setScrollCallback(winid, cbfun);
+
   var _glfwSetWindowUserPointer = (winid, ptr) => {
       var win = GLFW.WindowFromId(winid);
       if (!win) return;
@@ -9157,6 +9209,8 @@ var wasmImports = {
   _emscripten_get_now_is_monotonic: __emscripten_get_now_is_monotonic,
   /** @export */
   abort: _abort,
+  /** @export */
+  emscripten_asm_const_int: _emscripten_asm_const_int,
   /** @export */
   emscripten_date_now: _emscripten_date_now,
   /** @export */
@@ -9536,6 +9590,8 @@ var wasmImports = {
   /** @export */
   glfwSetKeyCallback: _glfwSetKeyCallback,
   /** @export */
+  glfwSetScrollCallback: _glfwSetScrollCallback,
+  /** @export */
   glfwSetWindowUserPointer: _glfwSetWindowUserPointer,
   /** @export */
   glfwSwapBuffers: _glfwSwapBuffers,
@@ -9595,7 +9651,7 @@ var missingLibrarySymbols = [
   'getCallstack',
   'emscriptenLog',
   'convertPCtoSourceLocation',
-  'readEmAsmArgs',
+  'runMainThreadEmAsm',
   'listenOnce',
   'autoResumeAudioContext',
   'dynCallLegacy',
@@ -9760,6 +9816,8 @@ var unexportedSymbols = [
   'warnOnce',
   'UNWIND_CACHE',
   'readEmAsmArgsArray',
+  'readEmAsmArgs',
+  'runEmAsmFunction',
   'jstoi_q',
   'jstoi_s',
   'getExecutableName',
