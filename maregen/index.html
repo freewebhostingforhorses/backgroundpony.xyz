@@ -635,7 +635,7 @@ function setColors() {
 	//console.log("Random pointyMane:", randomPointyMane);
 	//console.log("Random pointyMane2:", randomPointyMane2);
 	//console.log("Random doodlyMane:", randomDoodlyMane);
-	//console.log("Random poofyMane:", randomPoofyMane3);
+	console.log("Random poofyMane:", randomPoofyMane3);
 
 	if (alicornChance) {
 		alert("You found a rare alicorn! Make sure to preserve it for future studies.");
@@ -746,8 +746,8 @@ function setColors() {
 			if (poofyMane3Paths.includes(path.id)) 
 				path.style.display = 'block';
 				
-			//positionPathBefore("horn-fill", "horn-patch-fill")
-			//positionPathBefore("horn-outline", "horn-patch-outline")
+			positionPathBefore("horn-fill", "horn-patch-fill")
+			positionPathBefore("horn-outline", "horn-patch-outline")
 		}  else {
 			if (pointyMane1Paths.includes(path.id)) 
 				path.style.display = 'block'; 
