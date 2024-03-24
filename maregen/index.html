@@ -383,14 +383,18 @@ function prepareColors() {
 	maneBackColor = randomHexColorCode(seed + Math.random())
 	maneBackColorDarktone 	= LightenDarkenColor(maneBackColor, -15)
 	maneBackColorOutline     = LightenDarkenColor(maneBackColor, -35)
+
+	maneBackColorBrighttone 	= LightenDarkenColor(maneBackColor, 30)
+	maneBackColorOutlineBrighttone 	= LightenDarkenColor(maneBackColorOutline, 15)
 	
 	maneFrontColor = randomHexColorCode(seed + Math.random())
 	maneFrontColorOutline     = LightenDarkenColor(maneFrontColor, -35)
-
+	
 	bodyColor = randomHexColorCode(seed + Math.random())
 	bodyColorOutline     = LightenDarkenColor(bodyColor, -65)
 	bodyColorBack        = LightenDarkenColor(bodyColor, -32)
 	bodyColorBackOutline = LightenDarkenColor(bodyColor, -75)
+	
 }
 
 runs = 0;
@@ -471,6 +475,23 @@ function setColors() {
 		"mane5-outline",
 		"mane5-fill-loose",
 		"mane5-outline-loose",
+		
+		
+		"mane6-front-outline",
+		"mane6-front-fill",
+		"mane6-side-outline-1",	
+		"mane6-side-outline-2",	
+		"mane6-side-fill-type-1",	
+		"mane6-side-fill-type-2",	
+		"mane6-side-fill-type-3",	
+		"mane6-outline",	
+		"mane6-fill", 
+		"mane6-tail-outline",
+		"mane6-tail-outline-2",
+		"mane6-tail-fill-1",	
+		"mane6-tail-fill-2",
+		
+		
 	]
 	
 	pointyMane1Paths = [
@@ -536,6 +557,22 @@ function setColors() {
 		"mane5-outline-loose",
 	]
 	
+	poofyMane3Paths = [
+		"mane6-front-outline",
+		"mane6-front-fill",
+		"mane6-side-outline-1",	
+		"mane6-side-outline-2",	
+		"mane6-side-fill-type-1",	
+		"mane6-side-fill-type-2",	
+		"mane6-side-fill-type-3",	
+		"mane6-outline",	
+		"mane6-fill", 
+		"mane6-tail-outline",
+		"mane6-tail-outline-2",
+		"mane6-tail-fill-1",	
+		"mane6-tail-fill-2",
+	]
+	
 	eyeStops = [
 		"stop27",
 		"stop24",
@@ -573,19 +610,22 @@ function setColors() {
 	scrunchChance = randomScrunch < 0.01;
 
 	randomPointyMane = Math.random();
-	pointyManeChance = randomPointyMane < 0.20;
+	pointyManeChance = randomPointyMane < 0.16;
 
 	randomPointyMane2 = Math.random();
-	pointyMane2Chance = (!pointyManeChance) && randomPointyMane2 < 0.20;
+	pointyMane2Chance = (!pointyManeChance) && randomPointyMane2 < 0.16;
 
 	randomDoodlyMane = Math.random();
-	doodlyManeChance = (!pointyManeChance) && (!pointyMane2Chance) && randomDoodlyMane < 0.20;
+	doodlyManeChance = (!pointyManeChance) && (!pointyMane2Chance) && randomDoodlyMane < 0.16;
 
 	randomPoofyMane = Math.random();
-	poofyManeChance = (!doodlyManeChance) && (!pointyManeChance) && (!doodlyManeChance) && (randomPoofyMane < 0.20);
+	poofyManeChance = (!doodlyManeChance) && (!pointyManeChance) && (!doodlyManeChance) && (randomPoofyMane < 0.16);
 
 	randomAlcoholicMane = Math.random();
-	alcoholicManeChance = (!poofyManeChance) && (!doodlyManeChance) && (!pointyMane2Chance) && (!pointyManeChance) && (randomAlcoholicMane < 0.20);
+	alcoholicManeChance = (!poofyManeChance) && (!doodlyManeChance) && (!pointyMane2Chance) && (!pointyManeChance) && (randomAlcoholicMane < 0.16);
+
+	randomPoofyMane3 = Math.random();
+	poofyMane3Chance = (!alcoholicManeChance) && (!poofyManeChance) && (!doodlyManeChance) && (!pointyMane2Chance) && (!pointyManeChance) && (randomPoofyMane3 < 0.16);
 
 
 	//console.log("Random Scrunch:", randomScrunch);
@@ -595,7 +635,7 @@ function setColors() {
 	//console.log("Random pointyMane:", randomPointyMane);
 	//console.log("Random pointyMane2:", randomPointyMane2);
 	//console.log("Random doodlyMane:", randomDoodlyMane);
-	//console.log("Random poofyMane:", randomPoofyMane);
+	console.log("Random poofyMane:", randomPoofyMane3);
 
 	if (alicornChance) {
 		alert("You found a rare alicorn! Make sure to preserve it for future studies.");
@@ -637,6 +677,15 @@ function setColors() {
 		if (fillColor == "#94008c") {
 			path.style.setProperty('fill', maneBackColorDarktone, 'important');
 		}
+		
+		if (fillColor == "#1400ec") {
+			path.style.setProperty('fill', maneBackColorOutlineBrighttone, 'important');
+		}
+		
+		if (fillColor == "#00caff") {
+			path.style.setProperty('fill', maneBackColorBrighttone, 'important');
+		}
+		
 		
 		if (fillColor == "#3dff00") {
 			path.style.setProperty('fill', maneFrontColor, 'important');
@@ -693,7 +742,13 @@ function setColors() {
 				
 			positionPathBefore("horn-fill", "horn-patch-fill")
 			positionPathBefore("horn-outline", "horn-patch-outline")
-		} else {
+		} else if (poofyMane3Chance) {
+			if (poofyMane3Paths.includes(path.id)) 
+				path.style.display = 'block';
+				
+			//positionPathBefore("horn-fill", "horn-patch-fill")
+			//positionPathBefore("horn-outline", "horn-patch-outline")
+		}  else {
 			if (pointyMane1Paths.includes(path.id)) 
 				path.style.display = 'block'; 
 			if (path.id == "horn-patch-fill")
