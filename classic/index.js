@@ -1022,7 +1022,7 @@ function createWasm() {
     // This assertion doesn't hold when emscripten is run in --post-link
     // mode.
     // TODO(sbc): Read INITIAL_MEMORY out of the wasm file in post-link mode.
-    //assert(wasmMemory.buffer.byteLength === 67108864);
+    //assert(wasmMemory.buffer.byteLength === 16777216);
     updateMemoryViews();
 
     wasmTable = wasmExports['__indirect_function_table'];
@@ -1178,10 +1178,10 @@ function dbg(text) {
 // === Body ===
 
 var ASM_CONSTS = {
-  16877624: () => { document.exitPointerLock(); },  
- 16877656: () => { document.activeElement.blur(); },  
- 16877691: () => { document.exitPointerLock(); },  
- 16877723: () => { document.activeElement.blur(); }
+  1148680: () => { document.exitPointerLock(); },  
+ 1148712: () => { document.activeElement.blur(); },  
+ 1148747: () => { document.exitPointerLock(); },  
+ 1148779: () => { document.activeElement.blur(); }
 };
 
 
@@ -6822,7 +6822,7 @@ var ASM_CONSTS = {
       checkStackCookie();
       if (e instanceof WebAssembly.RuntimeError) {
         if (_emscripten_stack_get_current() <= 0) {
-          err('Stack overflow detected.  You can try increasing -sSTACK_SIZE (currently set to 16777216)');
+          err('Stack overflow detected.  You can try increasing -sSTACK_SIZE (currently set to 1048576)');
         }
       }
       quit_(1, e);
