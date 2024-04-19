@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/darcula.min.css" />
+        <style>
+            body {
+                background-color: #1a1a1a;
+				margin: 0;
+				margin-left: 100px;
+				margin-right: 100px;
+            }
+
+			#display {
+				display: block;
+				margin: 0 auto;
+				padding-top: 20px;
+				padding-bottom: 20px;
+			}
+
+            .CodeMirror {
+                font-size: 15px;
+            }
+
+            .CodeMirror-linenumber.CodeMirror-gutter-elt,
+            .cm-s-darcula .CodeMirror-gutters {
+                padding-left: 10px;
+                padding-right: 3px;
+            }
+        </style>
+        <title>Procedural texture editor</title>
+    </head>
+
+    <body>
+        <canvas id="display" width="16" height="16"></canvas>
+        <textarea id="code">// You have four arrays controlling the colors for each pixel. [red, blue, green, alpha]
+// Each array contains a float value containing the brightness of the pixel.
+// You can access the current time through tick.
+// You can change the size of the pixel grid through gridSize
+// You can change the scaling of the box through scaling
+
+//gridSize = 16;
+//scaling = 20;
+
+for (let x = 0; x < gridSize; x++) {
+    for (let y = 0; y < gridSize; y++) {
+        red.push(Math.sin((y + tick) / 16));
+        green.push(Math.sin((x + tick) / 16));
+        blue.push(Math.sin((x + y + tick) / 16));
+        alpha.push(1);
+    }
+}</textarea>
+
+        <script>
+			let gridSize = 16;
+            let scaling = 20;
+			
+            const display = document.getElementById("display");
+            const ctx = display.getContext("2d");
+            const text = document.getElementById("code");
+			
+			let tick = 0;
+            let red = [];
+            let green = [];
+            let blue = [];
+            let alpha = [];
+
+            function drawGrid() {
+                for (let y = 0; y < gridSize; y++) {
+                    for (let x = 0; x < gridSize; x++) {
+                        const index = y * gridSize + x;
+                        ctx.fillStyle = `rgba(${red[index] * 255}, ${green[index] * 255}, ${blue[index] * 255}, ${alpha[index]})`;
+                        ctx.fillRect(x * scaling, y * scaling, scaling, scaling);
+                    }
+                }
+            }
+
+            function update() {
+				tick++;
+				display.width = gridSize * scaling;
+				display.height = gridSize * scaling;
+
+                red.length = 0;
+                green.length = 0;
+                blue.length = 0;
+                alpha.length = 0;
+                ctx.clearRect(0, 0, display.width, display.height);
+                eval(text.value);
+                drawGrid();
+            }
+
+            const codeMirror = CodeMirror.fromTextArea(text, {
+                lineNumbers: true,
+                mode: "javascript",
+                indentUnit: 4,
+                tabSize: 4,
+                indentWithTabs: true,
+                theme: "darcula",
+                lineWrapping: true,
+            });
+
+			text.value = `
+			// You have four arrays controlling the colors for each pixel. [red, blue, green, alpha]
+			// Each array contains a float value containing the brightness of the pixel.
+			// You can access the current time through tick.
+			// You can change the size of the pixel grid through gridSize
+			// You can change the scaling of the box through scaling
+
+			//gridSize = 16;
+			//scaling = 20;
+
+			for (let x = 0; x < gridSize; x++) {
+				for (let y = 0; y < gridSize; y++) {
+					red.push(Math.sin((y + tick) / 16));
+					green.push(Math.sin((x + tick) / 16));
+					blue.push(Math.sin((x + y + tick) / 16));
+					alpha.push(1);
+				}
+			}`;
+
+            codeMirror.on("change", (instance) => {
+                text.value = instance.getValue();
+                update();
+            });
+
+            setInterval(update, 50);
+        </script>
+    </body>
+</html>
