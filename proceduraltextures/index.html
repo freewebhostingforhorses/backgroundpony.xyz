@@ -28,20 +28,37 @@
                 padding-left: 10px;
                 padding-right: 3px;
             }
+			
+			button {
+				display: block;
+				margin: 0 auto;
+				margin-top: 20px; 
+				font-family: Arial;
+				font-weight: 600;
+				border: none;
+				font-size: 2.2rem;
+				letter-spacing: 2px;
+				padding: 9px 25px 9px 25px;
+				background-color: #2b2b2b;
+				color: #ececec;
+				outline: none;
+				cursor: pointer;
+			}
         </style>
         <title>Procedural texture editor</title>
     </head>
 
     <body>
         <canvas id="display" width="16" height="16"></canvas>
-        <textarea id="code">// You have four arrays controlling the colors for each pixel. [red, blue, green, alpha]
-// Each array contains a float value containing the brightness of the pixel.
+        <textarea id="code">// You can modify pixel component data through the arrays red, green, blue, alpha.
+// Once you're done working with it, call render(red, blue, green, alpha) to push it to the canvas.
+
 // You can access the current time through tick.
-// You can change the size of the pixel grid through gridSize
-// You can change the scaling of the box through scaling
+// You can change the size of the pixel grid through gridSize.
+// You can change the size a grid pixel through scaling.
 
 //gridSize = 16;
-//scaling = 20;
+//scaling = 24;
 
 for (let x = 0; x < gridSize; x++) {
     for (let y = 0; y < gridSize; y++) {
@@ -50,33 +67,53 @@ for (let x = 0; x < gridSize; x++) {
         blue.push(Math.sin((x + y + tick) / 16));
         alpha.push(1);
     }
-}</textarea>
+}
+
+render(red, blue, green, alpha);</textarea>
 
         <script>
+			let tickRate = 20;
 			let gridSize = 16;
-            let scaling = 20;
+            let scaling = 24;
 			
             const display = document.getElementById("display");
             const ctx = display.getContext("2d");
             const text = document.getElementById("code");
-			
 			let tick = 0;
-            let red = [];
-            let green = [];
-            let blue = [];
-            let alpha = [];
-
+			
+			let red = new Array(256).fill(0.0);
+			let green = new Array(256).fill(0.0);
+			let blue = new Array(256).fill(0.0);
+			let alpha = new Array(256).fill(0.0);
+			
+			let imageR = new Array(256).fill(0.0);
+			let imageG = new Array(256).fill(0.0);
+			let imageB = new Array(256).fill(0.0);
+			let imageA = new Array(256).fill(0.0);
+			
+			
+			function render(r, g, b, a) {
+				for (let i = 0; i < red.length; i++) {
+					imageR[i] = r[i];
+					imageG[i] = g[i];
+					imageB[i] = b[i];
+					imageA[i] = a[i];
+				}
+			}
+			
             function drawGrid() {
                 for (let y = 0; y < gridSize; y++) {
                     for (let x = 0; x < gridSize; x++) {
                         const index = y * gridSize + x;
-                        ctx.fillStyle = `rgba(${red[index] * 255}, ${green[index] * 255}, ${blue[index] * 255}, ${alpha[index]})`;
+						ctx.fillStyle = `rgba(${imageR[index] * 255}, ${imageG[index] * 255}, ${imageB[index] * 255}, ${imageA[index]})`;
                         ctx.fillRect(x * scaling, y * scaling, scaling, scaling);
                     }
                 }
             }
 
             function update() {
+                eval(text.value);
+				
 				tick++;
 				display.width = gridSize * scaling;
 				display.height = gridSize * scaling;
@@ -86,7 +123,6 @@ for (let x = 0; x < gridSize; x++) {
                 blue.length = 0;
                 alpha.length = 0;
                 ctx.clearRect(0, 0, display.width, display.height);
-                eval(text.value);
                 drawGrid();
             }
 
@@ -100,31 +136,13 @@ for (let x = 0; x < gridSize; x++) {
                 lineWrapping: true,
             });
 
-			text.value = `
-			// You have four arrays controlling the colors for each pixel. [red, blue, green, alpha]
-			// Each array contains a float value containing the brightness of the pixel.
-			// You can access the current time through tick.
-			// You can change the size of the pixel grid through gridSize
-			// You can change the scaling of the box through scaling
-
-			//gridSize = 16;
-			//scaling = 20;
-
-			for (let x = 0; x < gridSize; x++) {
-				for (let y = 0; y < gridSize; y++) {
-					red.push(Math.sin((y + tick) / 16));
-					green.push(Math.sin((x + tick) / 16));
-					blue.push(Math.sin((x + y + tick) / 16));
-					alpha.push(1);
-				}
-			}`;
-
             codeMirror.on("change", (instance) => {
                 text.value = instance.getValue();
-                update();
             });
-
-            setInterval(update, 50);
+			
+            setInterval(update, (1000 / tickRate));
         </script>
+		
+		<!-- <button> Share </button> -->
     </body>
 </html>
